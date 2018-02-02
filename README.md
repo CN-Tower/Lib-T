@@ -18,7 +18,7 @@ For Python2.7
  * [T.reject](#treject)
  * [T.every](#tevery)
  * [T.some](#tsome)
- * [T.uniq](#tunique)
+ * [T.uniq](#tuniq)
  * [T.pluck](#tpluck)
  * [T.list](#tlist)
  * [T.log](#tlog)
