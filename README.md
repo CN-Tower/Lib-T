@@ -1,4 +1,4 @@
-# Lib-T
+# FuncLib
 
 A data processing methods lib of python
 
