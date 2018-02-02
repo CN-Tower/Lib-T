@@ -4,9 +4,10 @@
                         A data processing methods lib of python
     -----------------------------------------------------------------------------------
                                  Author: CN-Tower
-                                Version: V1.0.2
+                                  Pyson: 2.7
                                    Date: 2018-2-2
-                                 GitHub: http://github.com/CN-Tower/dataTools
+                                Version: V1.0.2
+                                 GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           * T.find                 * T.find_index
                           * T.find_where           * T.contains
