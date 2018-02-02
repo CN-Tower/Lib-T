@@ -12,12 +12,12 @@ Date: 2018-2-2
 GitHub: http://github.com/CN-Tower/dataTools
 
 ## Methods
-      * T.find                 * T.find_index
-      * T.find_where           * T.contains
-      * T.reject               * T.every
-      * T.some                 * T.uniq
-      * T.pluck                * T.list
-      * T.log                  * T.now
+ * [T.find](#tfind)                      * [T.find_index](#tfindindex)
+ * [T.find_where](#tfindwhere)           * [T.contains](#tcontains)
+ * [T.reject](#treject)                  * [T.every](#tevery)
+ * [T.some](#tsome)                      * [T.uniq](#tunique)
+ * [T.pluck](#tpluck)                    * [T.list](#tlist)
+ * [T.log](#tlog)                        * [T.now](#tnow)
 
 ## Document
 
