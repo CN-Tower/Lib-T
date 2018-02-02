@@ -1,6 +1,6 @@
-""" 
+"""
     ===================================================================================
-                                      The T lib
+                                        Func-Lib
                         A data processing methods lib of python
     -----------------------------------------------------------------------------------
                                  Author: CN-Tower
@@ -285,12 +285,16 @@ class T(object):
 
     @staticmethod
     def list(*values):
+        def list_handler(val):
+            if isinstance(val, list):
+                return val
+            return [val]
         if len(values) == 0:
             return []
         elif len(values) == 1:
-            return isinstance(values[0], list) and values[0] or [values[0]]
+            return list_handler(values[0])
         else:
-            return reduce(lambda a, b: (isinstance(a, list) and a or [a]) + (isinstance(b, list) and b or [b]), values)
+            return reduce(lambda a, b: list_handler(a) + list_handler(b), values)
     """ -----------------------------------------------------------------------------------
     ### T.list
         Return now system time.
