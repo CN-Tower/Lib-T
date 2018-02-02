@@ -13,8 +13,8 @@ GitHub: http://github.com/CN-Tower/dataTools
 
 ## Methods
  * [T.find](#tfind) 
- * [T.find_index](#tfindindex)
- * [T.find_where](#tfindwhere) 
+ * [T.find_index](#tfind_index)
+ * [T.find_where](#tfind_where) 
  * [T.contains](#tcontains)
  * [T.reject](#treject)
  * [T.every](#tevery)
@@ -37,7 +37,9 @@ GitHub: http://github.com/CN-Tower/dataTools
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
+                
             Tom = T.find(lambda x: x['name'] == 'Tom', persons)
+            
             print(Tom)  # => {"age": 12, "name": "Tom"}
         ===================================================================================
     ```
@@ -49,7 +51,9 @@ GitHub: http://github.com/CN-Tower/dataTools
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
+                
             Hint_idx = T.find_index({"name": 'Mary'}, persons)
+            
             print(Hint_idx)  # => 2
         ===================================================================================
     ```
@@ -62,7 +66,9 @@ GitHub: http://github.com/CN-Tower/dataTools
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
+                
             person = T.find_where({"age": 35}, persons)
+            
             print(person)  # => {"age": 35, "name": "Mary"}
         ===================================================================================
     ```
@@ -73,7 +79,9 @@ GitHub: http://github.com/CN-Tower/dataTools
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
+                
             is_contains_Marry = T.contains({"name": "Mary", "age": 22}, persons)
+            
             print(is_contains_Marry)  # => False
         ===================================================================================
     ```
@@ -85,7 +93,9 @@ GitHub: http://github.com/CN-Tower/dataTools
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
+                
             adult = T.reject(lambda x: x['age'] < 18, persons)
+            
             print(adult)  # => [{"age": 20, "name": "Jerry"}, {"age": 35, "name": "Mary"}]
         ===================================================================================
     ```
@@ -95,13 +105,18 @@ GitHub: http://github.com/CN-Tower/dataTools
         Short-circuits and stops traversing the list if a false element is found.
         eg:
             tmp_list = [0, '', 3, None]
+            
             every_true = T.every(True, tmp_list)
+            
             print(every_true)  # => False
-
+            
+        eg:
             persons = [{"name": "Tom", "age": 12, "sex": "m"},
                {"name": "Jerry", "age": 20, "sex": "m"},
                {"name": "Mary", "age": 35, "sex": "f"}]
+               
             is_all_male = T.every(lambda x: x['sex'] == "m", persons)
+            
             print(is_all_male)  # => False
         ===================================================================================
     ```
@@ -111,13 +126,18 @@ GitHub: http://github.com/CN-Tower/dataTools
         Short-circuits and stops traversing the list if a true element is found.
         eg:
             tmp_list = [0, '', 3, None]
+            
             some_true = T.some(True, tmp_list)
+            
             print(some_true)  # => True
-
+            
+        eg:
             persons = [{"name": "Tom", "age": 12, "sex": "m"},
                 {"name": "Jerry", "age": 20, "sex": "m"},
                 {"name": "Mary", "age": 35, "sex": "f"}]
+                
             is_some_female = T.some(lambda x: x['sex'] == "f", persons)
+            
             print(is_some_female)  # => True
         ===================================================================================
     ```
@@ -139,13 +159,18 @@ GitHub: http://github.com/CN-Tower/dataTools
         In particular only the first occurence of each value is kept.
         eg:
             persons = ["Tom", "Tom", "Jerry"]
+            
             persons = T.uniq(persons)
+            
             print(persons)  # => ["Jerry", "Tom"]
+            
         eg:
             persons = [{"name": "Tom", "age": 12, "sex": "m"},
                 {"name": "Tom", "age": 20, "sex": "m"},
                 {"name": "Mary", "age": 35, "sex": "f"}]
+                
             persons = T.uniq(persons, {"name": "Tom"})
+            
             print(persons)  # => [{"age": 12, "name": "Tom", "sex": "m"}, {"age": 35, "name": "Mary", "sex": "f"}]
         ===================================================================================
     ```
