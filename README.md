@@ -1,6 +1,5 @@
 # dataTools
 
-The T lib
 A data processing methods lib of python
 
 ## about
