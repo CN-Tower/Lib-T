@@ -49,7 +49,7 @@ class T(object):
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
             Tom = T.find(lambda x: x['name'] == 'Tom', persons)
-            print(Tom)  # => {"name": "Tom", "age": 18}
+            print(Tom)  # => {"age": 12, "name": "Tom"}
         ===================================================================================
     """
 
@@ -99,7 +99,7 @@ class T(object):
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
             person = T.find_where({"age": 35}, persons)
-            print(person)  # => {"name": "Mary", "age": 35}
+            print(person)  # => {"age": 35, "name": "Mary"}
         ===================================================================================
     """
 
@@ -137,13 +137,13 @@ class T(object):
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
             adult = T.reject(lambda x: x['age'] < 18, persons)
-            print(adult)  # => [{"name": "Jerry", "age": 20}, {"name": "Mary", "age": 35}]
+            print(adult)  # => [{"age": 20, "name": "Jerry"}, {"age": 35, "name": "Mary"}]
         ===================================================================================
     """
 
     @staticmethod
     def every(fn, _list):
-        if bool(fn) and bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
+        if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
             for item in _list:
                 if 'function' in str(type(fn)):
                     if not bool(fn(item)):
@@ -171,7 +171,7 @@ class T(object):
 
     @staticmethod
     def some(fn, _list):
-        if bool(fn) and bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
+        if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
             for item in _list:
                 if 'function' in str(type(fn)):
                     if bool(fn(item)):
@@ -198,7 +198,7 @@ class T(object):
     """
 
     @staticmethod
-    def drop(_list):
+    def drop(_list, is_drop_0=False):
         if bool(_list) and isinstance(_list, list):
             tmp_list = copy.deepcopy(_list)
             list_len = len(tmp_list)
@@ -206,7 +206,11 @@ class T(object):
                 for j in range(0, list_len):
                     if j == list_len:
                         break
-                    if tmp_list[j] != 0 and not bool(tmp_list[j]):
+                    if is_drop_0:
+                        drop_condition = not bool(tmp_list[j])
+                    else:
+                        drop_condition = not bool(tmp_list[j]) and tmp_list[j] != 0
+                    if drop_condition:
                         tmp_list.remove(tmp_list[j])
                         list_len -= 1
             return tmp_list
@@ -217,7 +221,10 @@ class T(object):
         eg:
             tmp_list = [0, '', 3, None, [], {}, ['Yes'], 'Test']
             drop_val = T.drop(tmp_list)
-            print(some_true)  # => [0, 3, ['Yes'], 'Test']
+            drop_val_and_0 = T.drop(tmp_list, True)
+            
+            print(drop_val)        # => [0, 3, ['Yes'], 'Test']
+            print(drop_val_and_0)  # => [3, ['Yes'], 'Test']
         ===================================================================================
     """
 
@@ -247,13 +254,13 @@ class T(object):
         eg:
             persons = ["Tom", "Tom", "Jerry"]
             persons = T.uniq(persons)
-            print(persons)  # => ["Tom", "Jerry"]
+            print(persons)  # => ["Jerry", "Tom"]
         eg:
             persons = [{"name": "Tom", "age": 12, "sex": "m"},
                 {"name": "Tom", "age": 20, "sex": "m"},
                 {"name": "Mary", "age": 35, "sex": "f"}]
             persons = T.uniq(persons, {"name": "Tom"})
-            print(persons)  # => [{"name": "Tom", "age": 12}, {"name": "Mary", "age": 35}]
+            print(persons)  # => [{"age": 12, "name": "Tom", "sex": "m"}, {"age": 35, "name": "Mary", "sex": "f"}]
         ===================================================================================
     """
 
@@ -276,10 +283,10 @@ class T(object):
                 {"name": "Mary", "hobbies": ['hiking', 'sing']}]
 
             hobbies = T.pluck(persons, 'hobbies')
-            print(hobbies) # => ["sing", "running", 'hiking', 'sing']
-
-            hobbies = T.pluck(persons, 'hobbies', uniq=True)
-            print(hobbies) # => ["sing", "running", 'hiking']
+            hobbies_uniq = T.pluck(persons, 'hobbies', uniq=True)
+            
+            print(hobbies)      # => ["sing", "running", 'hiking', 'sing']
+            print(hobbies_uniq) # => ["sing", "running", 'hiking']
         ===================================================================================
     """
 
@@ -299,7 +306,11 @@ class T(object):
     ### T.list
         Return now system time.
         eg:
-            print(T.now()) # => '2018-2-1 19:32:10'
+            print(T.list())       # => []
+            print(T.list([]))     # => []
+            print(T.list({}))     # => [{}]
+            print(T.list(None))   # => [None]
+            print(T.list('test')) # => ['test']
         ===================================================================================
     """
 
@@ -317,7 +328,30 @@ class T(object):
     ### T.log
         Show log clear in console.
         eg:
-            T.log(msg='Test message Test message Test message Test message!', title='Msg From Test:')
+            T.log()
+            T.log('Hello T-log!')
+            T.log('This is Test message!', 'Msg From Test:')
+            
+            # =>
+            ===========================================================================
+                                        Msg From T-log (V1.0.2)
+            ---------------------------------------------------------------------------
+            Have no Message!
+            ===========================================================================
+            
+            # =>
+            ===========================================================================
+                                        Msg From T-log (V1.0.2)
+            ---------------------------------------------------------------------------
+            Hello T-log!
+            ===========================================================================
+            
+            # =>
+            ===========================================================================
+                                            Msg From Test:
+            ---------------------------------------------------------------------------
+            This is Test message!
+            ===========================================================================
         ===================================================================================
     """
 
