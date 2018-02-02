@@ -2,6 +2,8 @@
 
 A data processing methods lib of python
 
+For Python2.7
+
 ## about
     Author: CN-Tower
     Version: V1.0.2
