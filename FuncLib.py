@@ -312,6 +312,42 @@ class T(object):
     """
 
     @staticmethod
+    def dump(_json):
+        if isinstance(_json, list) or isinstance(_json, dict) or isinstance(_json, tuple):
+            return json.dumps(_json, sort_keys=True, indent=2)
+        return _json
+    """ -----------------------------------------------------------------------------------
+    ### T.dump
+        Return a formatted json string.
+        eg:
+            persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
+                {"name": "Jerry", "hobbies": []},
+                {"name": "Mary", "hobbies": ['hiking', 'sing']}]
+            print(T.dump(persons)) #=>
+            [
+              {
+                "hobbies": [
+                  "sing", 
+                  "running"
+                ], 
+                "name": "Tom"
+              }, 
+              {
+                "hobbies": [], 
+                "name": "Jerry"
+              }, 
+              {
+                "hobbies": [
+                  "hiking", 
+                  "sing"
+                ], 
+                "name": "Mary"
+              }
+            ]
+        ===================================================================================
+    """
+    
+    @staticmethod
     def log(msg='Have no Message!', title='Msg From T-log (V1.0.2)', line_len=85):
         title = isinstance(title, str) and title or str(title) or 'Msg From T-log (V1.0.2)'
         title = len(title) <= 35 and title or title[:35]
@@ -319,7 +355,7 @@ class T(object):
         line_m = '-' * line_len
         title = ' ' * int((line_len - len(title))/2) + title
         print('%s\n%s\n%s' % (line_b, title, line_m))
-        print(msg)
+        print(T.dump(msg))
         print(line_b)
     """ -----------------------------------------------------------------------------------
     ### T.log
@@ -328,6 +364,7 @@ class T(object):
             T.log()
             T.log('Hello T-log!')
             T.log('This is Test message!', 'Msg From Test:')
+            T.log([{"name": "Tom", "hobbies": ["sing", "running"]}, {"name": "Jerry", "hobbies": []}], persons)
             
             # =>
             ===========================================================================
@@ -345,9 +382,28 @@ class T(object):
             
             # =>
             ===========================================================================
-                                            Msg From Test:
+                                           Msg From Test:
             ---------------------------------------------------------------------------
             This is Test message!
+            ===========================================================================
+            
+            # =>
+            ===========================================================================
+                                             persons
+            ---------------------------------------------------------------------------
+            [
+              {
+                "hobbies": [
+                  "sing", 
+                  "running"
+                ], 
+                "name": "Tom"
+              }, 
+              {
+                "hobbies": [], 
+                "name": "Jerry"
+              }
+            ]
             ===========================================================================
         ===================================================================================
     """
