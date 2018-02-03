@@ -264,7 +264,9 @@ class T(object):
         tmp_body = isinstance(body, dict) and [body] or body
         if isinstance(tmp_body, list):
             for k in key:
-                tmp_body = reduce(T.list, map(lambda x: x[k], tmp_body))
+                field_k = map(lambda x: x[k], tmp_body)
+                if len(field_k) > 0:
+                    tmp_body = reduce(T.list, map(lambda x: x[k], tmp_body))
                 tmp_body = T.list(tmp_body)
             if bool(opt) and "uniq" in opt and opt['uniq']:
                 tmp_body = T.uniq(tmp_body)
