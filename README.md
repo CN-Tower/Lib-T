@@ -21,6 +21,7 @@ For Python2.7
  * [T.uniq](#tuniq)
  * [T.pluck](#tpluck)
  * [T.list](#tlist)
+ * [T.dump](#tdump)
  * [T.log](#tlog)
  * [T.now](#tnow)
 
@@ -208,8 +209,30 @@ For Python2.7
         print(T.list({}))     # => [{}]
         print(T.list(None))   # => [None]
         print(T.list('test')) # => ['test']
-
+``` 
+### T.dump
+``` 
+    Return a formatted json string.
+    eg:
+        persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
+            {"name": "Jerry", "hobbies": []}]
+            
+        print(T.dump(persons)) #=>
+        [
+          {
+            "hobbies": [
+              "sing", 
+              "running"
+            ], 
+            "name": "Tom"
+          }, 
+          {
+            "hobbies": [], 
+            "name": "Jerry"
+          }
+        ]
 ```
+
 ### T.log
 ``` 
 
@@ -218,6 +241,7 @@ For Python2.7
         T.log()
         T.log('Hello T-log!')
         T.log('This is Test message!', 'Msg From Test:')
+        T.log([{"name": "Tom", "hobbies": ["sing", "running"]}, {"name": "Jerry", "hobbies": []}], persons)
 
         # =>
         ===========================================================================
@@ -238,6 +262,25 @@ For Python2.7
                                         Msg From Test:
         ---------------------------------------------------------------------------
         This is Test message!
+        ===========================================================================
+
+        # =>
+        ===========================================================================
+                                          persons
+        ---------------------------------------------------------------------------
+        [
+          {
+            "hobbies": [
+              "sing", 
+              "running"
+            ], 
+            "name": "Tom"
+          }, 
+          {
+            "hobbies": [], 
+            "name": "Jerry"
+          }
+        ]
         ===========================================================================
 
 ```
