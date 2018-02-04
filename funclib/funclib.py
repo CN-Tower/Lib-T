@@ -6,7 +6,7 @@
                                  Author: CN-Tower
                                   Pyson: 2.7
                                    Date: 2018-2-2
-                                Version: V1.0.2
+                                Version: V1.0.4
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           * T.find                 * T.find_index
@@ -14,15 +14,24 @@
                           * T.reject               * T.every
                           * T.some                 * T.uniq
                           * T.pluck                * T.list
-                          * T.log                  * T.now
+                          * T.dump                 * T.log
+                          * T.timer                * T.now
+                          * T.help
     ===================================================================================
 """
+from help import Help
 import time
 import copy
 import json
 
 
 class T(object):
+
+    keyword_list = [
+        'help', 'find', 'find_index', 'find_where', 'contains', 'reject',
+        'every', 'some', 'uniq', 'pluck', 'list', 'dump', 'log', 'timer', 'now'
+    ]
+
     def __init__(self):
         pass
 
@@ -349,8 +358,8 @@ class T(object):
     """
     
     @staticmethod
-    def log(msg='Have no Message!', title='Msg From T-log (V1.0.2)', line_len=85):
-        title = isinstance(title, str) and title or str(title) or 'Msg From T-log (V1.0.2)'
+    def log(msg='Have no Message!', title='Msg From T-log (V1.0.4)', line_len=85):
+        title = isinstance(title, str) and title or str(title) or 'Msg From T-log (V1.0.4)'
         title = len(title) <= 35 and title or title[:35]
         line_b = '=' * line_len
         line_m = '-' * line_len
@@ -369,14 +378,14 @@ class T(object):
             
             # =>
             ===========================================================================
-                                        Msg From T-log (V1.0.2)
+                                        Msg From T-log (V1.0.4)
             ---------------------------------------------------------------------------
             Have no Message!
             ===========================================================================
             
             # =>
             ===========================================================================
-                                        Msg From T-log (V1.0.2)
+                                        Msg From T-log (V1.0.4)
             ---------------------------------------------------------------------------
             Hello T-log!
             ===========================================================================
@@ -417,6 +426,58 @@ class T(object):
         Return now system time.
         eg:
             print(T.now()) # => '2018-2-1 19:32:10'
+        ===================================================================================
+    """
+
+    @staticmethod
+    def help(*args):
+        help_info = vars(Help).items()
+        help_msg_list = []
+        for key, value in help_info:
+            if key in T.keyword_list:
+                help_msg_list.append({key: value})
+        help_msg_list.sort(lambda a, b: T.find_index(a.keys()[0], T.keyword_list) - T.find_index(b.keys()[0], T.keyword_list))
+        help_msg = ''
+        if len(args) > 0 and args[0] in T.keyword_list:
+            for item in help_msg_list:
+                if args[0] in item:
+                    help_msg = item[args[0]]
+            T.log(help_msg)
+        else:
+            for item in help_msg_list:
+                help_msg += item.values()[0]
+            print (help_msg)
+        return help_msg
+    """ -----------------------------------------------------------------------------------
+    ### T.help
+        Return the FuncLib or it's method doc
+        eg:
+            T.help('find')
+            # => 
+            =====================================================================================
+                               Msg From T-log (V1.0.4)
+            -------------------------------------------------------------------------------------
+            
+                ### T.find
+                ```
+                    Looks through each value in the list, returning the first one that passes
+                    a truth test (predicate), or None.If no value passes the test the function
+                    returns as soon as it finds an acceptable element, and doesn't traverse
+                    the entire list.
+            
+                    eg:
+                        persons = [{"name": "Tom", "age": 12},
+                            {"name": "Jerry", "age": 20},
+                            {"name": "Mary", "age": 35}]
+            
+                        Tom = T.find(lambda x: x['name'] == 'Tom', persons)
+            
+                        print(Tom)  # => {"age": 12, "name": "Tom"}
+            
+                ```
+            
+            =====================================================================================
+
         ===================================================================================
     """
 

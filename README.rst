@@ -11,7 +11,8 @@ For Python2.7
     GitHub: http://github.com/CN-Tower/dataTools
 
 ## Methods
- * [T.find](#tfind) 
+ * [T.help](#thelp)
+ * [T.find](#tfind)
  * [T.find_index](#tfind_index)
  * [T.find_where](#tfind_where) 
  * [T.contains](#tcontains)
@@ -27,8 +28,39 @@ For Python2.7
 
 ## Document
 
+### T.help
+```
+    Return the FuncLib or it's method doc
+    eg:
+        T.help('find')
+        # =>
+        =====================================================================================
+                           Msg From T-log (V1.0.4)
+        -------------------------------------------------------------------------------------
+
+            ### T.find
+            ```
+                Looks through each value in the list, returning the first one that passes
+                a truth test (predicate), or None.If no value passes the test the function
+                returns as soon as it finds an acceptable element, and doesn't traverse
+                the entire list.
+
+                eg:
+                    persons = [{"name": "Tom", "age": 12},
+                        {"name": "Jerry", "age": 20},
+                        {"name": "Mary", "age": 35}]
+
+                    Tom = T.find(lambda x: x['name'] == 'Tom', persons)
+
+                    print(Tom)  # => {"age": 12, "name": "Tom"}
+
+            ```
+
+        =====================================================================================
+
+```
 ### T.find
-``` 
+```
     Looks through each value in the list, returning the first one that passes
     a truth test (predicate), or None.If no value passes the test the function
     returns as soon as it finds an acceptable element, and doesn't traverse
@@ -42,7 +74,7 @@ For Python2.7
         Tom = T.find(lambda x: x['name'] == 'Tom', persons)
 
         print(Tom)  # => {"age": 12, "name": "Tom"}
-        
+
 ```
 ### T.find_index
 ``` 
