@@ -19,6 +19,7 @@
 """
 import time
 import copy
+import json
 
 
 class T(object):
@@ -364,7 +365,7 @@ class T(object):
             T.log()
             T.log('Hello T-log!')
             T.log('This is Test message!', 'Msg From Test:')
-            T.log([{"name": "Tom", "hobbies": ["sing", "running"]}, {"name": "Jerry", "hobbies": []}], persons)
+            T.log([{"name": "Tom", "hobbies": ["sing", "running"]}, {"name": "Jerry", "hobbies": []}], 'persons')
             
             # =>
             ===========================================================================
