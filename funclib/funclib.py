@@ -27,8 +27,8 @@ import json
 
 class T(object):
 
-    keyword_list = [
-        'help', 'find', 'find_index', 'find_where', 'contains', 'reject',
+    help_list = [
+        'info', 'help', 'find', 'find_index', 'find_where', 'contains', 'reject',
         'every', 'some', 'uniq', 'pluck', 'list', 'dump', 'log', 'timer', 'now'
     ]
 
@@ -466,19 +466,19 @@ class T(object):
     @staticmethod
     def help(*args):
         help_info = vars(Help).items()
-        help_msg_list = []
+        help_keys = []
         for key, value in help_info:
-            if key in T.keyword_list:
-                help_msg_list.append({key: value})
-        help_msg_list.sort(lambda a, b: T.find_index(a.keys()[0], T.keyword_list) - T.find_index(b.keys()[0], T.keyword_list))
+            if key in T.help_list:
+                help_keys.append({key: value})
+        help_keys.sort(lambda a, b: T.find_index(a.keys()[0], T.help_list) - T.find_index(b.keys()[0], T.help_list))
         help_msg = ''
-        if len(args) > 0 and args[0] in T.keyword_list:
-            for item in help_msg_list:
+        if len(args) > 0 and args[0] in T.help_list and args[0] != 'info':
+            for item in help_keys:
                 if args[0] in item:
                     help_msg = item[args[0]]
             T.log(help_msg)
         else:
-            for item in help_msg_list:
+            for item in help_keys:
                 help_msg += item.values()[0]
             print (help_msg)
         return help_msg
@@ -514,4 +514,3 @@ class T(object):
 
         ===================================================================================
     """
-

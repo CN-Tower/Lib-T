@@ -19,7 +19,6 @@ class Help(object):
                           * T.timer                * T.now
                           * T.help
     ===================================================================================
-        
     """
 
     help = """
@@ -339,6 +338,25 @@ class Help(object):
               }
             ]
             ===========================================================================
+    
+    ```
+    """
+
+    timer = """
+    ### T.timer
+    ``` 
+        Set a interval and times limit.
+        eg: 
+            count = 0
+            def fun():
+                return count == 3:
+                print(count)
+                count += 1
+            T.timer(fn, 5, 2)
+            # =>
+                >>> 1  #at 0s
+                >>> 2  #at 2s
+                >>> 3  #at 4s
     
     ```
     """

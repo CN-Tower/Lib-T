@@ -24,6 +24,7 @@ For Python2.7
  * [T.list](#tlist)
  * [T.dump](#tdump)
  * [T.log](#tlog)
+ * [T.timer](#ttimer)
  * [T.now](#tnow)
 
 ## Document
@@ -316,6 +317,25 @@ For Python2.7
         ===========================================================================
 
 ```
+
+### T.timer
+```
+
+    Set a interval and times limit.
+    eg:
+        count = 0
+        def fun():
+            return count == 3:
+            print(count)
+            count += 1
+        T.timer(fn, 5, 2)
+        # =>
+            >>> 1  #at 0s
+            >>> 2  #at 2s
+            >>> 3  #at 4s
+
+```
+
 ### T.now
 ``` 
 
