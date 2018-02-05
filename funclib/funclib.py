@@ -417,6 +417,40 @@ class T(object):
             ===========================================================================
         ===================================================================================
     """
+    
+    @staticmethod
+    def timer(fn, times=60, interval=1):
+        if 'function' not in str(type(fn)) or not isinstance(times, int) or not isinstance(interval, int) \
+                or times < 1 or interval < 0:
+            return
+        is_time_out = False
+        count = 0
+        while True:
+            count += 1
+            if count == times:
+                fn()
+                is_time_out = True
+                break
+            elif fn():
+                break
+            time.sleep(interval)
+        return is_time_out
+    """ -----------------------------------------------------------------------------------
+    ### T.timer
+        Set a interval and times limit.
+        eg: 
+            count = 0
+            def fun():
+                return count == 3:
+                print(count)
+                count += 1
+            T.timmer(fn, 5, 2)
+            # =>
+                >>> 1  #at 0s
+                >>> 2  #at 2s
+                >>> 3  #at 4s
+        ===================================================================================
+    """
 
     @staticmethod
     def now():
