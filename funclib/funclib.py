@@ -444,7 +444,7 @@ class T(object):
                 return count == 3:
                 print(count)
                 count += 1
-            T.timmer(fn, 5, 2)
+            T.timer(fn, 5, 2)
             # =>
                 >>> 1  #at 0s
                 >>> 2  #at 2s
