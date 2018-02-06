@@ -11,12 +11,10 @@ For Python2.7
     GitHub: http://github.com/CN-Tower/dataTools
 
 ## Quick Start
-```
     $ pip install funclib
     $ python
     >>> from funclib import T
     >>> T.help()
-```
 
 ## Methods
  * [T.help](#thelp)
