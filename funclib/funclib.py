@@ -6,7 +6,7 @@
                                  Author: CN-Tower
                                   Pyson: 2.7
                                    Date: 2018-2-2
-                                Version: V1.0.4
+                                Version: 1.1.2
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           a: ALL                    0: T.help
@@ -361,8 +361,8 @@ class T(object):
     """
     
     @staticmethod
-    def log(msg='Have no Message!', title='Msg From T-log (V1.2.1)', line_len=85):
-        title = isinstance(title, str) and title or str(title) or 'Msg From T-log (V1.2.1)'
+    def log(msg='Have no Message!', title='Msg From T-log (V1.1.2)', line_len=85):
+        title = isinstance(title, str) and title or str(title) or 'Msg From T-log (V1.1.2)'
         title = len(title) <= 35 and title or title[:35]
         line_b = '=' * line_len
         line_m = '-' * line_len
@@ -381,14 +381,14 @@ class T(object):
             
             # =>
             ===========================================================================
-                                        Msg From T-log (V1.2.1)
+                                        Msg From T-log (V1.1.2)
             ---------------------------------------------------------------------------
             Have no Message!
             ===========================================================================
             
             # =>
             ===========================================================================
-                                        Msg From T-log (V1.2.1)
+                                        Msg From T-log (V1.1.2)
             ---------------------------------------------------------------------------
             Hello T-log!
             ===========================================================================
@@ -510,7 +510,7 @@ class T(object):
             T.help('find')
             # => 
             =====================================================================================
-                               Msg From T-log (V1.0.4)
+                               Msg From T-log (V1.1.2)
             -------------------------------------------------------------------------------------
             
                 ### T.find

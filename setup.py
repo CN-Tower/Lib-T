@@ -5,7 +5,7 @@ import sys
 
 setup(
     name="funclib",
-    version="1.1.0",
+    version="1.1.2",
     author="CN-Tower",
     author_email="247114045@qq.com",
     description="A data processing methods lib of python",

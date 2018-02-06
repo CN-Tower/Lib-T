@@ -7,7 +7,7 @@ class Help(object):
                                  Author: CN-Tower
                                   Pyson: 2.7
                                    Date: 2018-2-2
-                                Version: V1.0.4
+                                Version: 1.1.2
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           a: ALL                    0: T.help
