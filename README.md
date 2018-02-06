@@ -4,11 +4,19 @@ A data processing methods lib of python
 
 For Python2.7
 
-## about
+## About
     Author: CN-Tower
     Version: V1.1.3
     Date: 2018-2-2
     GitHub: http://github.com/CN-Tower/dataTools
+
+## Quick Start
+```
+    $ pip install funclib
+    $ python
+    >>> from funclib import T
+    >>> T.help()
+```
 
 ## Methods
  * [T.help](#thelp)
