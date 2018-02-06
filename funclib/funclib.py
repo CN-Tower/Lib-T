@@ -6,12 +6,12 @@
                                  Author: CN-Tower
                                   Pyson: 2.7
                                    Date: 2018-2-2
-                                Version: 1.1.2
+                                Version: 1.1.3
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           a: ALL                    0: T.help
-                          1: T.find                 2: T.find_index
-                          3: T.find_where           4: T.contains
+                          1: T.find                 2: T.index
+                          3: T.where                4: T.isin
                           5: T.reject               6: T.every
                           7: T.some                 8: T.uniq
                           9: T.pluck               10: T.list
@@ -28,7 +28,7 @@ import json
 class T(object):
 
     help_list = [
-        'info', 'help', 'find', 'find_index', 'find_where', 'contains', 'reject',
+        'info', 'help', 'find', 'index', 'where', 'isin', 'reject',
         'every', 'some', 'uniq', 'pluck', 'list', 'dump', 'log', 'timer', 'now'
     ]
 
@@ -59,7 +59,7 @@ class T(object):
     """
 
     @staticmethod
-    def find_index(obj, _list):
+    def index(obj, _list):
         if bool(obj) and bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
             if obj in _list:
                 return _list.index(obj)
@@ -76,26 +76,26 @@ class T(object):
             return -1
         return -1
     """ -----------------------------------------------------------------------------------
-    ### T.find_index
+    ### T.index
         Looks through the list and returns the item index. If no match is found,
         or if list is empty, -1 will be returned.
         eg:
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
-            Hint_idx = T.find_index({"name": 'Mary'}, persons)
+            Hint_idx = T.index({"name": 'Mary'}, persons)
             print(Hint_idx)  # => 2
         ===================================================================================
     """
 
     @staticmethod
-    def find_where(obj, _list):
-        idx = T.find_index(obj, _list)
+    def where(obj, _list):
+        idx = T.index(obj, _list)
         if idx != -1:
             return _list[idx]
         return None
     """ -----------------------------------------------------------------------------------
-    ### T.find_where
+    ### T.where
         Looks through the list and returns the first value that matches all of the
         key-value pairs listed in properties. If no match is found, or if list is
         empty, None will be returned.
@@ -103,23 +103,23 @@ class T(object):
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
-            person = T.find_where({"age": 35}, persons)
+            person = T.where({"age": 35}, persons)
             print(person)  # => {"age": 35, "name": "Mary"}
         ===================================================================================
     """
 
     @staticmethod
-    def contains(item, _list):
-        idx = T.find_index(item, _list)
+    def isin(item, _list):
+        idx = T.index(item, _list)
         return idx != -1
     """ -----------------------------------------------------------------------------------
-    ### T.contains
+    ### T.isin
         Returns true if the value is present in the list.
         eg:
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
-            is_contains_Marry = T.contains({"name": "Mary", "age": 22}, persons)
+            is_contains_Marry = T.isin({"name": "Mary", "age": 22}, persons)
             print(is_contains_Marry)  # => False
         ===================================================================================
     """
@@ -361,8 +361,8 @@ class T(object):
     """
     
     @staticmethod
-    def log(msg='Have no Message!', title='Msg From T-log (V1.1.2)', line_len=85):
-        title = isinstance(title, str) and title or str(title) or 'Msg From T-log (V1.1.2)'
+    def log(msg='Have no Message!', title='Msg From T-log (V1.1.3)', line_len=85):
+        title = isinstance(title, str) and title or str(title) or 'Msg From T-log (V1.1.3)'
         title = len(title) <= 35 and title or title[:35]
         line_b = '=' * line_len
         line_m = '-' * line_len
@@ -381,14 +381,14 @@ class T(object):
             
             # =>
             ===========================================================================
-                                        Msg From T-log (V1.1.2)
+                                        Msg From T-log (V1.1.3)
             ---------------------------------------------------------------------------
             Have no Message!
             ===========================================================================
             
             # =>
             ===========================================================================
-                                        Msg From T-log (V1.1.2)
+                                        Msg From T-log (V1.1.3)
             ---------------------------------------------------------------------------
             Hello T-log!
             ===========================================================================
@@ -473,7 +473,7 @@ class T(object):
         for key, value in help_info:
             if key in T.help_list:
                 help_keys.append({key: value})
-        help_keys.sort(lambda a, b: T.find_index(a.keys()[0], T.help_list) - T.find_index(b.keys()[0], T.help_list))
+        help_keys.sort(lambda a, b: T.index(a.keys()[0], T.help_list) - T.index(b.keys()[0], T.help_list))
         help_msg = ''
         if len(args) > 0:
             if args[0] in T.help_list and args[0] != 'info':
@@ -490,7 +490,7 @@ class T(object):
         else:
             help_msg += help_keys[0].values()[0]
             print (help_msg)
-            selected_method = raw_input('Select a method: ')
+            selected_method = raw_input('Input a method\'s index to show it\'s doc: ')
 
             def check_is_int(x):
                 try:
@@ -501,7 +501,7 @@ class T(object):
             if check_is_int(selected_method) and int(selected_method) in range(0, len(T.help_list) - 1):
                 T.help(T.help_list[int(selected_method) + 1])
             else:
-                T.help('a')
+                T.help(selected_method)
 
     """ -----------------------------------------------------------------------------------
     ### T.help
@@ -510,7 +510,7 @@ class T(object):
             T.help('find')
             # => 
             =====================================================================================
-                               Msg From T-log (V1.1.2)
+                               Msg From T-log (V1.1.3)
             -------------------------------------------------------------------------------------
             
                 ### T.find

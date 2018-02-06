@@ -7,12 +7,12 @@ class Help(object):
                                  Author: CN-Tower
                                   Pyson: 2.7
                                    Date: 2018-2-2
-                                Version: 1.1.2
+                                Version: 1.1.3
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           a: ALL                    0: T.help
-                          1: T.find                 2: T.find_index
-                          3: T.find_where           4: T.contains
+                          1: T.find                 2: T.index
+                          3: T.where                4: T.isin
                           5: T.reject               6: T.every
                           7: T.some                 8: T.uniq
                           9: T.pluck               10: T.list
@@ -75,8 +75,8 @@ class Help(object):
     ```
     """
 
-    find_index = """
-    ### T.find_index
+    index = """
+    ### T.index
     ``` 
         Looks through the list and returns the item index. If no match is found,
         or if list is empty, -1 will be returned.
@@ -86,15 +86,15 @@ class Help(object):
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
     
-            Hint_idx = T.find_index({"name": 'Mary'}, persons)
+            Hint_idx = T.index({"name": 'Mary'}, persons)
     
             print(Hint_idx)  # => 2
             
     ```
     """
 
-    find_where = """
-    ### T.find_where
+    where = """
+    ### T.where
     ``` 
         Looks through the list and returns the first value that matches all of the
         key-value pairs listed in properties. If no match is found, or if list is
@@ -105,15 +105,15 @@ class Help(object):
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
     
-            person = T.find_where({"age": 35}, persons)
+            person = T.where({"age": 35}, persons)
     
             print(person)  # => {"age": 35, "name": "Mary"}
     
     ```
     """
 
-    contains = """
-    ### T.contains
+    isin = """
+    ### T.isin
     ``` 
         Returns true if the value is present in the list.
         eg:
@@ -121,7 +121,7 @@ class Help(object):
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
     
-            is_contains_Marry = T.contains({"name": "Mary", "age": 22}, persons)
+            is_contains_Marry = T.isin({"name": "Mary", "age": 22}, persons)
     
             print(is_contains_Marry)  # => False
     

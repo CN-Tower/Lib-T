@@ -6,16 +6,16 @@ For Python2.7
 
 ## about
     Author: CN-Tower
-    Version: 1.1.2
+    Version: V1.1.3
     Date: 2018-2-2
     GitHub: http://github.com/CN-Tower/dataTools
 
 ## Methods
  * [T.help](#thelp)
  * [T.find](#tfind)
- * [T.find_index](#tfind_index)
- * [T.find_where](#tfind_where) 
- * [T.contains](#tcontains)
+ * [T.index](#tindex)
+ * [T.where](#twhere) 
+ * [T.isin](#tisin)
  * [T.reject](#treject)
  * [T.every](#tevery)
  * [T.some](#tsome)
@@ -36,7 +36,7 @@ For Python2.7
         T.help('find')
         # =>
         =====================================================================================
-                           Msg From T-log (V1.1.2)
+                                        Msg From T-log (V1.1.2)
         -------------------------------------------------------------------------------------
 
             ### T.find
@@ -77,7 +77,7 @@ For Python2.7
         print(Tom)  # => {"age": 12, "name": "Tom"}
 
 ```
-### T.find_index
+### T.index
 ``` 
     Looks through the list and returns the item index. If no match is found,
     or if list is empty, -1 will be returned.
@@ -87,12 +87,12 @@ For Python2.7
             {"name": "Jerry", "age": 20},
             {"name": "Mary", "age": 35}]
 
-        Hint_idx = T.find_index({"name": 'Mary'}, persons)
+        Hint_idx = T.index({"name": 'Mary'}, persons)
 
         print(Hint_idx)  # => 2
         
 ```
-### T.find_where
+### T.where
 ``` 
     Looks through the list and returns the first value that matches all of the
     key-value pairs listed in properties. If no match is found, or if list is
@@ -103,12 +103,12 @@ For Python2.7
             {"name": "Jerry", "age": 20},
             {"name": "Mary", "age": 35}]
 
-        person = T.find_where({"age": 35}, persons)
+        person = T.where({"age": 35}, persons)
 
         print(person)  # => {"age": 35, "name": "Mary"}
 
 ```
-### T.contains
+### T.isin
 ``` 
 
     Returns true if the value is present in the list.
@@ -117,7 +117,7 @@ For Python2.7
             {"name": "Jerry", "age": 20},
             {"name": "Mary", "age": 35}]
 
-        is_contains_Marry = T.contains({"name": "Mary", "age": 22}, persons)
+        is_contains_Marry = T.isin({"name": "Mary", "age": 22}, persons)
 
         print(is_contains_Marry)  # => False
 
@@ -278,14 +278,14 @@ For Python2.7
 
         # =>
         ===========================================================================
-                                    Msg From T-log (V1.1.2)
+                                    Msg From T-log (V1.1.3)
         ---------------------------------------------------------------------------
         Have no Message!
         ===========================================================================
 
         # =>
         ===========================================================================
-                                    Msg From T-log (V1.1.2)
+                                    Msg From T-log (V1.1.3)
         ---------------------------------------------------------------------------
         Hello T-log!
         ===========================================================================
