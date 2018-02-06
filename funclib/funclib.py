@@ -9,14 +9,14 @@
                                 Version: V1.0.4
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
-                          * T.find                 * T.find_index
-                          * T.find_where           * T.contains
-                          * T.reject               * T.every
-                          * T.some                 * T.uniq
-                          * T.pluck                * T.list
-                          * T.dump                 * T.log
-                          * T.timer                * T.now
-                          * T.help
+                          a: ALL                    0: T.help
+                          1: T.find                 2: T.find_index
+                          3: T.find_where           4: T.contains
+                          5: T.reject               6: T.every
+                          7: T.some                 8: T.uniq
+                          9: T.pluck               10: T.list
+                         11: T.dump                12: T.log
+                         13: T.timer               14: T.now
     ===================================================================================
 """
 from help import Help
@@ -270,10 +270,13 @@ class T(object):
     """
 
     @staticmethod
-    def pluck(body, *key, **opt):
-        tmp_body = isinstance(body, dict) and [body] or body
+    def pluck(body, *keys, **opt):
+        if isinstance(body, dict):
+            tmp_body = [body]
+        else:
+            tmp_body = body
         if isinstance(tmp_body, list):
-            for k in key:
+            for k in keys:
                 field_k = map(lambda x: x[k], tmp_body)
                 if len(field_k) > 0:
                     tmp_body = reduce(T.list, map(lambda x: x[k], tmp_body))
@@ -358,8 +361,8 @@ class T(object):
     """
     
     @staticmethod
-    def log(msg='Have no Message!', title='Msg From T-log (V1.0.4)', line_len=85):
-        title = isinstance(title, str) and title or str(title) or 'Msg From T-log (V1.0.4)'
+    def log(msg='Have no Message!', title='Msg From T-log (V1.2.1)', line_len=85):
+        title = isinstance(title, str) and title or str(title) or 'Msg From T-log (V1.2.1)'
         title = len(title) <= 35 and title or title[:35]
         line_b = '=' * line_len
         line_m = '-' * line_len
@@ -378,14 +381,14 @@ class T(object):
             
             # =>
             ===========================================================================
-                                        Msg From T-log (V1.0.4)
+                                        Msg From T-log (V1.2.1)
             ---------------------------------------------------------------------------
             Have no Message!
             ===========================================================================
             
             # =>
             ===========================================================================
-                                        Msg From T-log (V1.0.4)
+                                        Msg From T-log (V1.2.1)
             ---------------------------------------------------------------------------
             Hello T-log!
             ===========================================================================
@@ -472,16 +475,34 @@ class T(object):
                 help_keys.append({key: value})
         help_keys.sort(lambda a, b: T.find_index(a.keys()[0], T.help_list) - T.find_index(b.keys()[0], T.help_list))
         help_msg = ''
-        if len(args) > 0 and args[0] in T.help_list and args[0] != 'info':
-            for item in help_keys:
-                if args[0] in item:
-                    help_msg = item[args[0]]
-            T.log(help_msg)
+        if len(args) > 0:
+            if args[0] in T.help_list and args[0] != 'info':
+                for item in help_keys:
+                    if args[0] in item:
+                        help_msg = item[args[0]]
+                T.log(help_msg)
+            elif args[0] in ['a', 'all']:
+                for item in help_keys:
+                    help_msg += item.values()[0]
+                print (help_msg)
+            else:
+                T.help()
         else:
-            for item in help_keys:
-                help_msg += item.values()[0]
+            help_msg += help_keys[0].values()[0]
             print (help_msg)
-        return help_msg
+            selected_method = raw_input('Select a method: ')
+
+            def check_is_int(x):
+                try:
+                    int(x)
+                    return True
+                except:
+                    return False
+            if check_is_int(selected_method) and int(selected_method) in range(0, len(T.help_list) - 1):
+                T.help(T.help_list[int(selected_method) + 1])
+            else:
+                T.help('a')
+
     """ -----------------------------------------------------------------------------------
     ### T.help
         Return the FuncLib or it's method doc
@@ -514,3 +535,4 @@ class T(object):
 
         ===================================================================================
     """
+

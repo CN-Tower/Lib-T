@@ -10,14 +10,14 @@ class Help(object):
                                 Version: V1.0.4
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
-                          * T.find                 * T.find_index
-                          * T.find_where           * T.contains
-                          * T.reject               * T.every
-                          * T.some                 * T.uniq
-                          * T.pluck                * T.list
-                          * T.dump                 * T.log
-                          * T.timer                * T.now
-                          * T.help
+                          a: ALL                    0: T.help
+                          1: T.find                 2: T.find_index
+                          3: T.find_where           4: T.contains
+                          5: T.reject               6: T.every
+                          7: T.some                 8: T.uniq
+                          9: T.pluck               10: T.list
+                         11: T.dump                12: T.log
+                         13: T.timer               14: T.now
     ===================================================================================
     """
 
