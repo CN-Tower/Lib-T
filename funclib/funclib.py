@@ -277,13 +277,13 @@ class T(object):
             print(is_all_male)  # => False
     """
     @staticmethod
-    def every(fn, _list):
+    def every(expected, _list):
         if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
             for item in _list:
-                if 'function' in str(type(fn)):
-                    if not bool(fn(item)):
+                if 'function' in str(type(expected)):
+                    if not bool(expected(item)):
                         return False
-                elif fn != bool(item):
+                elif expected != bool(item):
                     return False
             return True
         return False
@@ -306,13 +306,13 @@ class T(object):
             print(is_some_female)  # => True
     """
     @staticmethod
-    def some(fn, _list):
+    def some(expected, _list):
         if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
             for item in _list:
-                if 'function' in str(type(fn)):
-                    if bool(fn(item)):
+                if 'function' in str(type(expected)):
+                    if bool(expected(item)):
                         return True
-                elif fn == bool(item):
+                elif expected == bool(item):
                     return True
             return False
         return False
