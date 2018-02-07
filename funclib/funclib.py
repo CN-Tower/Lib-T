@@ -187,8 +187,11 @@ class T(object):
                 index = T.index(expected, tmp_list)
                 if index != -1 and index + 1 < len(tmp_list):
                     return tmp_list[:index + 1] + T.reject(expected, tmp_list[index + 1:])
-                return tmp_list
-            return list(set(tmp_list))
+            for i in range(0, len(tmp_list) - 1):
+                if len(tmp_list) <= i + 1:
+                    break
+                tmp_list = tmp_list[:i + 1] + T.reject(tmp_list[i], tmp_list[i + 1:])
+            return tmp_list
         return _list
 
     """
