@@ -176,21 +176,23 @@ class T(object):
     """
     @staticmethod
     def uniq(expected, _list=None):
+        is_no_expected = False
         if _list is None:
             _list = expected
-            expected = None
+            is_no_expected = True
         if isinstance(_list, tuple):
             _list = list(_list)
         if bool(_list) and isinstance(_list, list):
             tmp_list = copy.deepcopy(_list)
-            if bool(expected) and (isinstance(expected, dict) or 'function' in str(type(expected))):
+            if is_no_expected:
+                for i in range(0, len(tmp_list)):
+                    if len(tmp_list) <= i + 1:
+                        break
+                    tmp_list = tmp_list[:i + 1] + T.reject(tmp_list[i], tmp_list[i + 1:])
+            else:
                 index = T.index(expected, tmp_list)
                 if index != -1 and index + 1 < len(tmp_list):
-                    return tmp_list[:index + 1] + T.reject(expected, tmp_list[index + 1:])
-            for i in range(0, len(tmp_list) - 1):
-                if len(tmp_list) <= i + 1:
-                    break
-                tmp_list = tmp_list[:i + 1] + T.reject(tmp_list[i], tmp_list[i + 1:])
+                    tmp_list = tmp_list[:index + 1] + T.reject(expected, tmp_list[index + 1:])
             return tmp_list
         return _list
 
