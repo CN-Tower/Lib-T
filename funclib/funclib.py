@@ -25,7 +25,7 @@ import json
 import sys
 
 
-if sys.version[0] != '2'
+if sys.version[0] != '2':
     from functools import reduce
 
 
