@@ -25,11 +25,7 @@ import json
 import sys
 
 
-def check_is_python_v2():
-    return sys.version[0] == '2'
-
-
-if not check_is_python_v2():
+if sys.version[0] != '2'
     from functools import reduce
 
 
