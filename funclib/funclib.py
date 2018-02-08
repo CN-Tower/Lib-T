@@ -505,7 +505,7 @@ class T(object):
             =====================================================================================
     """
     @staticmethod
-    def help(*args):
+    def help(*args, **kwargs):
         help_info = vars(Help).items()
         help_keys = []
         for key, value in help_info:
@@ -519,15 +519,21 @@ class T(object):
                     if args[0] in item:
                         help_msg = item[args[0]]
                 T.log(help_msg)
+                if 'keep' in kwargs and kwargs['keep']:
+                    T.help(keep=True)
             elif args[0] in ['a', 'all']:
                 for item in help_keys:
                     help_msg += item.values()[0]
                 print (help_msg)
+                if 'keep' in kwargs and kwargs['keep']:
+                    T.help(keep=True)
             else:
-                T.help()
+                T.help(keep=True)
         else:
-            help_msg += help_keys[0].values()[0]
-            print (help_msg)
+            if not ('keep' in kwargs and kwargs['keep']):
+                help_msg += help_keys[0].values()[0]
+                print (help_msg)
+
             selected_method = raw_input('Input a method\'s index to show it\'s doc: ')
 
             def check_is_int(x):
@@ -537,6 +543,6 @@ class T(object):
                 except:
                     return False
             if check_is_int(selected_method) and int(selected_method) in range(0, len(T.help_list) - 1):
-                T.help(T.help_list[int(selected_method) + 1])
+                T.help(T.help_list[int(selected_method) + 1], keep=True)
             else:
-                T.help(selected_method)
+                T.help(selected_method, keep=True)
