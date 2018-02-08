@@ -1,45 +1,48 @@
-"""
-    ===================================================================================
-                                        Func-Lib
-                        A data processing methods lib of python
-    -----------------------------------------------------------------------------------
-                                 Author: CN-Tower
-                                   Date: 2018-2-2
-                                Version: V1.1.4
-                                 GitHub: http://github.com/CN-Tower/FuncLib
-    -----------------------------------------------------------------------------------
-                          0: T.help                 1: T.index
-                          2: T.find                 3: T.contains
-                          4: T.reject               5: T.uniq
-                          6: T.drop                 7: T.pluck
-                          8: T.every                9: T.some
-                         10: T.list                11: T.dump
-                         12: T.log                 13: T.timer
-                         14: T.now                 15: ALL
-    ===================================================================================
-"""
-from help import Help
+import sys
+import re
 import time
 import copy
 import json
-import sys
 
 
 if sys.version[0] != '2':
     from functools import reduce
+    raw_input = input
 
 
 class T(object):
 
-    help_list = [
-        'info', 'help', 'find', 'index', 'where', 'isin', 'reject',
-        'every', 'some', 'uniq', 'pluck', 'list', 'dump', 'log', 'timer', 'now'
-    ]
+    __version = 'V1.1.4'
+    
+    __info = """
+===================================================================================
+                                    Func-Lib
+                    A data processing methods lib of python
+-----------------------------------------------------------------------------------
+                             Author: CN-Tower
+                               Date: 2018-2-2
+                            Version: """ + __version + """
+                             GitHub: http://github.com/CN-Tower/FuncLib
+-----------------------------------------------------------------------------------
+                      0: T.help                 1: T.index
+                      2: T.find                 3: T.contains
+                      4: T.reject               5: T.uniq
+                      6: T.drop                 7: T.pluck
+                      8: T.every                9: T.some
+                     10: T.list                11: T.dump
+                     12: T.log                 13: T.timer
+                     14: T.now
+===================================================================================
+    """
 
-    def __init__(self):
-        pass
+    @staticmethod
+    def __docs():
+        return {'info': T.__info, 'help': T.__help, 'index': T.__index, 'find': T.__find, 'contains': T.__contains,
+                'reject': T.__reject, 'uniq': T.__uniq, 'drop': T.__drop, 'pluck': T.__pluck, 'every': T.__every,
+                'some': T.__some, 'list': T.__list, 'dump': T.__dump, 'log': T.__log, 'timer': T.__timer,
+                'now': T.__now, 'keys': map(lambda x: re.sub(r'\n|\s|=', '', x[:8]), T.__info.split('T.')[1:])}
 
-    """ 
+    __index = """ 
     ### T.index
         Looks through the list and returns the item index. If no match is found,
         or if list is empty, -1 will be returned.
@@ -55,6 +58,7 @@ class T(object):
             print(Jerry_idx)  # => 1
             print(Mary_idx)   # => 2
     """
+
     @staticmethod
     def index(expected, _list):
         if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
@@ -77,7 +81,7 @@ class T(object):
             return -1
         return -1
 
-    """
+    __find = """
     ### T.find
         Looks through each value in the list, returning the first one that passes
         a truth test (predicate), or None.If no value passes the test the function
@@ -95,6 +99,7 @@ class T(object):
             print(Jerry)  # => {'age': 20, 'name': 'Jerry'}
             print(Mary)   # => {'age': 35, 'name': 'Mary'}
     """
+
     @staticmethod
     def find(expected, _list):
         idx = T.index(expected, _list)
@@ -102,7 +107,7 @@ class T(object):
             return _list[idx]
         return None
 
-    """
+    __contains = """
     ### T.contains
         Returns true if the value is present in the list.
         eg:
@@ -117,12 +122,13 @@ class T(object):
             print(is_contains_Jerry)  # => False
             print(is_contains_Mary)   # => True
     """
+
     @staticmethod
     def contains(expected, _list):
         idx = T.index(expected, _list)
         return idx != -1
 
-    """
+    __reject = """
     ### T.reject
         Returns the values in list without the elements that the truth test (predicate) passes.
         The opposite of filter.
@@ -138,6 +144,7 @@ class T(object):
             print(not_Mary)  # => [{"age": 12, "name": "Tom"}, {"age": 20, "name": "Jerry"}]
             print(adults)    # => [{"age": 20, "name": "Jerry"}, {"age": 35, "name": "Mary"}]
     """
+
     @staticmethod
     def reject(expected, _list):
         index = T.index(expected, _list)
@@ -147,7 +154,7 @@ class T(object):
             return T.reject(expected, tmp_list)
         return _list
 
-    """
+    __uniq = """
     ### T.uniq
         Produces a duplicate-free version of the array.
         In particular only the first occurence of each value is kept.
@@ -172,6 +179,7 @@ class T(object):
             print(one_Tom)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'}, {'age': 35, 'name': 'Mary', 'sex': 'f'}]
             print(one_mail)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'}, {'age': 35, 'name': 'Mary', 'sex': 'f'}]
     """
+
     @staticmethod
     def uniq(expected, _list=None):
         is_no_expected = False
@@ -194,7 +202,7 @@ class T(object):
             return tmp_list
         return _list
 
-    """
+    __drop = """
     ### T.drop
         Delete false values expect 0.
         eg:
@@ -206,6 +214,7 @@ class T(object):
             print(drop_val)        # => [0, 3, ['Yes'], 'Test']
             print(drop_val_and_0)  # => [3, ['Yes'], 'Test']
     """
+
     @staticmethod
     def drop(_list, is_drop_0=False):
         if bool(_list) and isinstance(_list, list):
@@ -225,7 +234,7 @@ class T(object):
             return tmp_list
         return _list
 
-    """
+    __pluck = """
     ### T.pluck
         Pluck the list element of collections.
         eg:
@@ -240,13 +249,14 @@ class T(object):
             print(hobbies)      # => ["sing", "running", 'hiking', 'sing']
             print(hobbies_uniq) # => ["sing", "running", 'hiking']
     """
+
     @staticmethod
     def pluck(body, *key, **opt):
         if isinstance(body, dict):
             tmp_body = [body]
         else:
             tmp_body = body
-        if isinstance(tmp_body, list):
+        if isinstance(tmp_body, list) or isinstance(tmp_body, tuple):
             for k in key:
                 field_k = map(lambda x: x[k], tmp_body)
                 if len(field_k) > 0:
@@ -256,7 +266,7 @@ class T(object):
                 tmp_body = T.uniq(tmp_body)
         return tmp_body
 
-    """
+    __every = """
     ### T.every
         Returns true if all of the values in the list pass the predicate truth test.
         Short-circuits and stops traversing the list if a false element is found.
@@ -272,6 +282,7 @@ class T(object):
             print(every_true)   # => False
             print(is_all_male)  # => False
     """
+
     @staticmethod
     def every(expected, _list):
         if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
@@ -284,7 +295,7 @@ class T(object):
             return True
         return False
 
-    """
+    __some = """
     ### T.some
         Returns true if any of the values in the list pass the predicate truth test.
         Short-circuits and stops traversing the list if a true element is found.
@@ -301,6 +312,7 @@ class T(object):
             print(some_true)       # => True
             print(is_some_female)  # => True
     """
+
     @staticmethod
     def some(expected, _list):
         if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
@@ -313,7 +325,7 @@ class T(object):
             return False
         return False
 
-    """
+    __list = """
     ### T.list
         Return now system time.
         eg:
@@ -324,6 +336,7 @@ class T(object):
             print(T.list(None))   # => [None]
             print(T.list('test')) # => ['test']
     """
+
     @staticmethod
     def list(*values):
         def list_handler(val):
@@ -337,7 +350,7 @@ class T(object):
         else:
             return reduce(lambda a, b: list_handler(a) + list_handler(b), values)
 
-    """
+    __dump = """
     ### T.dump
         Return a formatted json string.
         eg:
@@ -359,46 +372,23 @@ class T(object):
               }
             ]
     """
+
     @staticmethod
     def dump(_json):
         if isinstance(_json, list) or isinstance(_json, dict) or isinstance(_json, tuple):
             return json.dumps(_json, sort_keys=True, indent=2)
         return _json
 
-    """
+    __log = """
     ### T.log
         Show log clear in console.
         eg:
             from Tools import T
-            T.log()
-            T.log('Hello T-log!')
-            T.log('This is Test message!', 'Msg From Test:')
-            T.log([{"name": "Tom", "hobbies": ["sing", "running"]}, {"name": "Jerry", "hobbies": []}], 'persons')
+            T.log([{"name": "Tom", "hobbies": ["sing", "running"]}, {"name": "Jerry", "hobbies": []}])
 
             # =>
             ===========================================================================
-                                        Msg From T-log (V1.0.2)
-            ---------------------------------------------------------------------------
-            Have no Message!
-            ===========================================================================
-
-            # =>
-            ===========================================================================
-                                        Msg From T-log (V1.0.2)
-            ---------------------------------------------------------------------------
-            Hello T-log!
-            ===========================================================================
-
-            # =>
-            ===========================================================================
-                                           Msg From Test:
-            ---------------------------------------------------------------------------
-            This is Test message!
-            ===========================================================================
-
-            # =>
-            ===========================================================================
-                                             persons
+                                      Msg From T-log (V1.0.2)
             ---------------------------------------------------------------------------
             [
               {
@@ -415,6 +405,7 @@ class T(object):
             ]
             ===========================================================================
     """
+
     @staticmethod
     def log(msg='Have no Message!', title='Msg From T-log (V1.0.2)', line_len=85):
         title = isinstance(title, str) and title or str(title) or 'Msg From T-log (V1.0.2)'
@@ -426,7 +417,7 @@ class T(object):
         print(T.dump(msg))
         print(line_b)
 
-    """
+    __timer = """
     ### T.timer
                 Set a interval and times limit.
         eg: 
@@ -445,6 +436,7 @@ class T(object):
                 >>> 3  #at 4s
                 >>> 4  #at 4s
     """
+
     @staticmethod
     def timer(fn, times=60, interval=1):
         if 'function' not in str(type(fn)) or not isinstance(times, int) or not isinstance(interval, int) \
@@ -463,25 +455,26 @@ class T(object):
             time.sleep(interval)
         return is_time_out
 
-    """
+    __now = """
     ### T.now
         Return now system time.
         eg:
             from Tools import T
             print(T.now()) # => '2018-2-1 19:32:10'
     """
+
     @staticmethod
     def now():
         return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
 
-    """
+    __help = """
     ### T.help
         Return the FuncLib or it's method doc
         eg:
             T.help('find')
             # => 
             =====================================================================================
-                               Msg From T-log (V1.1.3)
+                                    (funclib[""" + __version + """]) Document of T.index 
             -------------------------------------------------------------------------------------
             
                 ### T.find
@@ -504,45 +497,33 @@ class T(object):
             
             =====================================================================================
     """
+
     @staticmethod
     def help(*args, **kwargs):
-        help_info = vars(Help).items()
-        help_keys = []
-        for key, value in help_info:
-            if key in T.help_list:
-                help_keys.append({key: value})
-        help_keys.sort(lambda a, b: T.index(a.keys()[0], T.help_list) - T.index(b.keys()[0], T.help_list))
-        help_msg = ''
+        lib_docs = T.__docs()
+        doc_keys = lib_docs['keys']
         if len(args) > 0:
-            if args[0] in T.help_list and args[0] != 'info':
-                for item in help_keys:
-                    if args[0] in item:
-                        help_msg = item[args[0]]
-                T.log(help_msg)
-                if 'keep' in kwargs and kwargs['keep']:
-                    T.help(keep=True)
-            elif args[0] in ['a', 'all']:
-                for item in help_keys:
-                    help_msg += item.values()[0]
-                print (help_msg)
-                if 'keep' in kwargs and kwargs['keep']:
-                    T.help(keep=True)
-            else:
+            if args[0] in doc_keys:
+                T.log(lib_docs[args[0]])
+            if 'keep' in kwargs and kwargs['keep']:
                 T.help(keep=True)
         else:
             if not ('keep' in kwargs and kwargs['keep']):
-                help_msg += help_keys[0].values()[0]
-                print (help_msg)
+                print (lib_docs['info'])
 
-            selected_method = raw_input('Input a method\'s index to show it\'s doc: ')
+            idx = raw_input('Input a method\'s index to show it\'s doc: ')
+            if idx:
+                def is_can_int(x):
+                    try:
+                        int(x)
+                        return True
+                    except:
+                        return False
 
-            def check_is_int(x):
-                try:
-                    int(x)
-                    return True
-                except:
-                    return False
-            if check_is_int(selected_method) and int(selected_method) in range(0, len(T.help_list) - 1):
-                T.help(T.help_list[int(selected_method) + 1], keep=True)
-            else:
-                T.help(selected_method, keep=True)
+                if is_can_int(idx) and int(idx) in range(0, len(doc_keys)):
+                    key = doc_keys[int(idx)]
+                    T.log(lib_docs[key], 'Doc of T.' + key)
+                T.help(keep=True)
+
+
+T.help()
