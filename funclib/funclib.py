@@ -79,7 +79,7 @@ class T(object):
         Looks through the list and returns the item index. If no match is found,
         or if list is empty, -1 will be returned.
         eg:
-            from Tools import T
+            from funclib import T
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
@@ -104,7 +104,7 @@ class T(object):
         returns as soon as it finds an acceptable element, and doesn't traverse
         the entire list.
         eg:
-            from Tools import T
+            from funclib import T
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
@@ -136,7 +136,7 @@ class T(object):
         Looks through each value in the list, returning an array of all the values that
         pass a truth test (predicate).
         eg:
-            from Tools import T
+            from funclib import T
             persons = [{"name": "Tom", "age": 20},
                        {"name": "Jerry", "age": 20},
                        {"name": "Jerry", "age": 35}]
@@ -160,7 +160,7 @@ class T(object):
         Returns the values in list without the elements that the truth test (predicate) passes.
         The opposite of filter.
         eg:
-            from Tools import T
+            from funclib import T
             persons = [{"name": "Tom", "age": 12},
                        {"name": "Jerry", "age": 20},
                        {"name": "Mary", "age": 35}]
@@ -179,7 +179,7 @@ class T(object):
     ### T.reduce
         Returns the buildIn method 'reduce', in python 3 the 'reduce' is imported from functools.
         eg:
-            from Tools import T
+            from funclib import T
             num_list = [1 , 2, 3, 4]
             print(T.reduce(lambda a, b: a + b, num_list))  # => 10
     """
@@ -192,7 +192,7 @@ class T(object):
     ### T.contains
         Returns true if the value is present in the list.
         eg:
-            from Tools import T
+            from funclib import T
             persons = [{"name": "Tom", "age": 12},
                        {"name": "Jerry", "age": 20},
                        {"name": "Mary", "age": 35}]
@@ -223,7 +223,7 @@ class T(object):
         Flattens a nested array (the nesting can be to any depth). If you pass shallow,
         the array will only be flattened a single level.
         eg:
-            from Tools import T
+            from funclib import T
             flt_list_01 = T.flatten([1, [2], [3, [[4]]]])
             flt_list_02 = T.flatten([1, [2], [3, [[4]]]], True)
             print (flt_list_01)  # => [1, 2, 3, [[4]]]
@@ -238,7 +238,7 @@ class T(object):
         Produces a new values list by mapping each value in list through a transformation
         function (iteratee). 
         eg:
-            from Tools import T
+            from funclib import T
             num_list = [1 , 2, 3, 4]
             list_10 = T.each(lambda x: x % 2, num_list)
             print(list_10)  #=> [1, 0, 1, 0]
@@ -270,7 +270,7 @@ class T(object):
         Produces a duplicate-free version of the array.
         In particular only the first occurence of each value is kept.
         eg:
-            from Tools import T
+            from funclib import T
             persons00 = ("Tom", "Tom", "Jerry")
             persons01 = ["Tom", "Tom", "Jerry"]
             persons02 = [{"name": "Tom", "age": 12, "sex": "m"},
@@ -313,7 +313,7 @@ class T(object):
     ### T.drop
         Delete false values expect 0.
         eg:
-            from Tools import T
+            from funclib import T
             tmp_list = [0, '', 3, None, [], {}, ['Yes'], 'Test']
             drop_val = T.drop(tmp_list)
             drop_val_and_0 = T.drop(tmp_list, True)
@@ -341,7 +341,7 @@ class T(object):
     ### T.pluck
         Pluck the list element of collections.
         eg:
-            from Tools import T
+            from funclib import T
             persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
                 {"name": "Jerry", "hobbies": []},
                 {"name": "Mary", "hobbies": ['hiking', 'sing']}]
@@ -369,7 +369,7 @@ class T(object):
         Returns true if all of the values in the list pass the predicate truth test.
         Short-circuits and stops traversing the list if a false element is found.
         eg:
-            from Tools import T
+            from funclib import T
             tmp_list = [0, '', 3, None]
             persons = [{"name": "Tom", "age": 12, "sex": "m"},
                        {"name": "Jerry", "age": 20, "sex": "m"},
@@ -397,7 +397,7 @@ class T(object):
         Returns true if any of the values in the list pass the predicate truth test.
         Short-circuits and stops traversing the list if a true element is found.
         eg:
-            from Tools import T
+            from funclib import T
             tmp_list = [0, '', 3, None]
             persons = [{"name": "Tom", "age": 12, "sex": "m"},
                        {"name": "Jerry", "age": 20, "sex": "m"},
@@ -426,7 +426,7 @@ class T(object):
     ### T.list
         Return now system time.
         eg:
-            from Tools import T
+            from funclib import T
             print(T.list())       # => []
             print(T.list([]))     # => []
             print(T.list({}))     # => [{}]
@@ -443,7 +443,7 @@ class T(object):
     ### T.dump
         Return a formatted json string.
         eg:
-            from Tools import T
+            from funclib import T
             persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
                 {"name": "Jerry", "hobbies": []}]
             print(T.dump(persons)) #=>
@@ -469,7 +469,7 @@ class T(object):
     ### T.clone
         Create a deep-copied clone of the provided plain object.
         eg:
-            from Tools import T
+            from funclib import T
             persons = [{"name": "Tom", "age": 12}, {"name": "Jerry", "age": 20}]
             persons_01 = persons
             persons_02 = T.clone(persons)
@@ -485,7 +485,7 @@ class T(object):
     ### T.test
         Check is the match successful, a boolean value will be returned.
         eg:
-            from Tools import T
+            from funclib import T
             not_in = T.test(r'ab', 'Hello World!')
             in_str = T.test(r'll', 'Hello World!')
             print(not_in)  # => False
@@ -499,7 +499,7 @@ class T(object):
     ### T.replace
         Replace sub string of the origin string with re.sub()
         eg:
-            from Tools import T
+            from funclib import T
             info = 'Hello I'm Tom!'
             print(T.replace('Tom', 'Jack', info))  # => True
     """
@@ -517,7 +517,7 @@ class T(object):
     ### T.iscan
         Test is the expression valid, a boolean value will be returned.
         eg:
-            from Tools import T
+            from funclib import T
             print(T.iscan(int('a')))  # => False
             print(T.iscan(int(5)))  # => True
     """
@@ -536,7 +536,7 @@ class T(object):
     ### T.log
         Show log clear in console.
         eg:
-            from Tools import T
+            from funclib import T
             T.log([{"name": "Tom", "hobbies": ["sing", "running"]}, {"name": "Jerry", "hobbies": []}])
 
             # =>
@@ -580,7 +580,7 @@ class T(object):
     ### T.timer
         Set a timer with interval and timeout limit.
         eg: 
-            from Tools import T
+            from funclib import T
             count = 0
             def fn():
                 global count
@@ -603,7 +603,7 @@ class T(object):
     ### T.now
         Return now system time.
         eg:
-            from Tools import T
+            from funclib import T
             print(T.now()) # => '2018-2-1 19:32:10'
     """
 
@@ -632,7 +632,7 @@ class T(object):
                     sta = end
                     end = end + row_cols
                     if end > len(hints):
-                        # hints.append(' ' * (end - len(hints)) * max_len + ' ')
+                        hints.append(' ' * (end - len(hints)) * max_len + ' ')
                         end = len(hints)
                     print '[ ' + reduce(lambda a, b: a + ' ' + b, hints[sta:end]) + ']'
                     if end == len(hints):
@@ -653,7 +653,7 @@ class T(object):
     ### T.help
         Return the FuncLib or it's method doc
         eg:
-            from Tools import T
+            from funclib import T
             T.help('index')
             # => 
 ===========================================================================
@@ -678,4 +678,3 @@ class T(object):
         elif 2 < length < max_len:
             return string + ' ' * (max_len - length)
         return string
-
