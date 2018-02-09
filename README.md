@@ -1,12 +1,13 @@
 # FuncLib
 
-A data processing methods lib of python
+A data processing methods lib of python.
 
 ## About
-    Author: CN-Tower
+     Author: @CN-Tower
     Version: V2.0.0
-    Date: 2018-2-2
-    GitHub: http://github.com/CN-Tower/FuncLib
+  Create At: 2018-2-2
+  Update At: 2018-2-10
+     GitHub: http://github.com/CN-Tower/FuncLib
 
 ## Quick Start
 ```
