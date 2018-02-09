@@ -15,12 +15,14 @@ if sys.version[0] != '2':
 class T(object):
 
     __version = 'V2.0.0'
+    __log_title = 'FuncLib ( ' + __version + ' )'
+    __log_title_fix = 'FuncLib ( ' + __version + ' ) --> T.'
 
     @staticmethod
     def info():
-        keys = map(lambda x: re.sub(r'\n|\s|=', '', x[:8]), T.__info.split('T.')[1:])
+        keys = T.each(lambda x: re.sub(r'\n|\s|=', '', x[:8]), T.__info.split('T.')[1:])
         docs_vars = vars(T)
-        docs_keys = map(lambda x: '_T__' + x, keys)
+        docs_keys = T.each(lambda x: '_T__' + x, keys)
         docs = {}
         for key in keys:
             docs[key] = docs_vars[docs_keys[keys.index(key)]]
@@ -326,9 +328,9 @@ class T(object):
             tmp_body = body
         if isinstance(tmp_body, list) or isinstance(tmp_body, tuple):
             for k in key:
-                field_k = map(lambda x: x[k], tmp_body)
+                field_k = T.each(lambda x: x[k], tmp_body)
                 if len(field_k) > 0:
-                    tmp_body = reduce(T.list, map(lambda x: x[k], tmp_body))
+                    tmp_body = reduce(T.list, T.each(lambda x: x[k], tmp_body))
                 tmp_body = T.list(tmp_body)
             if bool(opt) and "uniq" in opt and opt['uniq']:
                 tmp_body = T.uniq(tmp_body)
@@ -489,8 +491,8 @@ class T(object):
     """
 
     @staticmethod
-    def log(msg='Have no Message!', title='Msg From T-log (V1.0.2)', line_len=85):
-        title = isinstance(title, str) and title or str(title) or 'Msg From T-log (V1.0.2)'
+    def log(msg='Have no Message!', title='FuncLib ( ' + __version + ' )', line_len=85):
+        title = isinstance(title, str) and title or str(title) or 'FuncLib ( ' + __version + ' )'
         title = len(title) <= 35 and title or title[:35]
         line_b = '=' * line_len
         line_m = '-' * line_len
@@ -507,7 +509,7 @@ class T(object):
 
             # =>
 ===========================================================================
-                     (funclib[""" + __version + """]) Doc of T.index 
+                            """ + __log_title + """
 ---------------------------------------------------------------------------
 [
   {
@@ -575,13 +577,15 @@ class T(object):
 
     @staticmethod
     def help(*args, **kwargs):
+        row_cols = 6
         docs_info = T.info()
         keys = docs_info['keys']
         docs = docs_info['docs']
+        max_len = max(T.each(lambda x: len(x), keys)) + 6
         if len(args) > 0:
             if args[0] in keys:
                 T.__clear()
-                T.log(docs[args[0]])
+                T.log(docs[args[0]], T.__log_title_fix + args[0])
             if 'keep' in kwargs and kwargs['keep']:
                 T.help(**kwargs)
         else:
@@ -590,15 +594,15 @@ class T(object):
                 print (docs['info'])
             elif not ('info' in kwargs and kwargs['info']):
                 print ('')
-                hints = map(lambda x: T.__fixstrlen(T.__fixstrlen(str(keys.index(x))) + ': T.' + x), keys)
+                hints = T.each(lambda x: T.__fixstrlen(T.__fixstrlen(str(keys.index(x))) + ': T.' + x, max_len), keys)
                 end = 0
                 while True:
                     sta = end
-                    end = end + 5
+                    end = end + row_cols
                     if end > len(hints):
-                        hints.append(' ' * (end - len(hints)) * 14)
+                        # hints.append(' ' * (end - len(hints)) * max_len + ' ')
                         end = len(hints)
-                    print '[' + reduce(lambda a, b: a + ' ' + b, hints[sta:end]) + ']'
+                    print '[ ' + reduce(lambda a, b: a + ' ' + b, hints[sta:end]) + ']'
                     if end == len(hints):
                         break
                 print ('')
@@ -611,7 +615,7 @@ class T(object):
                         print (docs[key])
                         return T.help(keep=True, info=True)
                     else:
-                        T.log(docs[key], '(funclib[' + T.__version + ']) Doc of T.' + key)
+                        T.log(docs[key], T.__log_title_fix + key)
                 T.help(keep=True)
     __help = """
     ### T.help
@@ -621,7 +625,7 @@ class T(object):
             T.help('index')
             # => 
 ===========================================================================
-                     (funclib[""" + __version + """]) Doc of T.index 
+                 """ + __log_title_fix + """index 
 ---------------------------------------------------------------------------
 """ + __index + """
 ===========================================================================
@@ -635,10 +639,12 @@ class T(object):
             os.system('clear')
 
     @staticmethod
-    def __fixstrlen(string):
+    def __fixstrlen(string, max_len=14):
         length = len(string)
         if length == 1:
-            return '0' + string
-        elif length > 2 < 14:
-            return string + ' ' * (14 - length)
+            return ' ' + string
+        elif 2 < length < max_len:
+            return string + ' ' * (max_len - length)
         return string
+
+T.help()
