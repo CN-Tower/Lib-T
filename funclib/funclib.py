@@ -46,9 +46,10 @@ class T(object):
                      10: T.drop                11: T.pluck                
                      12: T.every               13: T.some                
                      14: T.list                15: T.dump
-                     16: T.replace             17: T.iscan               
-                     18: T.log                 19: T.timer               
-                     20: T.now                 21: T.help                
+                     16: T.clone               17: T.test
+                     18: T.replace             19: T.iscan
+                     20: T.log                 21: T.timer               
+                     22: T.now                 23: T.help                
 ===================================================================================
     """
 
@@ -117,18 +118,19 @@ class T(object):
 
     @staticmethod
     def filter(predicate, _list):
-        tmp_list = []
+        tmp_list = T.clone(_list)
+        ret_list = []
         while True:
-            index = T.index(predicate, _list)
+            index = T.index(predicate, tmp_list)
             if index == -1:
                 break
             else:
-                tmp_list.append(_list[index])
-                if index < len(_list) - 1:
-                    _list = _list[index + 1:]
+                ret_list.append(tmp_list[index])
+                if index < len(tmp_list) - 1:
+                    tmp_list = tmp_list[index + 1:]
                 else:
                     break
-        return tmp_list
+        return ret_list
     __filter = """
     ### T.filter
         Looks through each value in the list, returning an array of all the values that
@@ -149,7 +151,7 @@ class T(object):
     def reject(predicate, _list):
         index = T.index(predicate, _list)
         if index != -1:
-            tmp_list = copy.deepcopy(_list)
+            tmp_list = T.clone(_list)
             del tmp_list[index]
             return T.reject(predicate, tmp_list)
         return _list
@@ -251,7 +253,7 @@ class T(object):
         if isinstance(_list, tuple):
             _list = list(_list)
         if bool(_list) and isinstance(_list, list):
-            tmp_list = copy.deepcopy(_list)
+            tmp_list = T.clone(_list)
             if is_no_predicate:
                 for i in range(0, len(tmp_list)):
                     if len(tmp_list) <= i + 1:
@@ -292,7 +294,7 @@ class T(object):
     @staticmethod
     def drop(_list, is_drop_0=False):
         if bool(_list) and isinstance(_list, list):
-            tmp_list = copy.deepcopy(_list)
+            tmp_list = T.clone(_list)
             list_len = len(tmp_list)
             for i in range(0, list_len):
                 for j in range(0, list_len):
@@ -458,6 +460,36 @@ class T(object):
                 "name": "Jerry"
               }
             ]
+    """
+
+    @staticmethod
+    def clone(obj):
+        return copy.deepcopy(obj)
+    __clone = """
+    ### T.clone
+        Create a deep-copied clone of the provided plain object.
+        eg:
+            from Tools import T
+            persons = [{"name": "Tom", "age": 12}, {"name": "Jerry", "age": 20}]
+            persons_01 = persons
+            persons_02 = T.clone(persons)
+            T.find({'name': 'Tom'}, persons)['age'] = 18
+            print(persons_01)  # => [{"name": "Tom", "age": 18}, {"name": "Jerry", "age": 20}]
+            print(persons_02)  # => [{"name": "Tom", "age": 12}, {"name": "Jerry", "age": 20}]
+    """
+
+    @staticmethod
+    def test(pattern, origin):
+        return re.search(pattern, origin) is not None
+    __test = """
+    ### T.test
+        Check is the match successful, a boolean value will be returned.
+        eg:
+            from Tools import T
+            not_in = T.test(r'ab', 'Hello World!')
+            in_str = T.test(r'll', 'Hello World!')
+            print(not_in)  # => False
+            print(in_str)  # => True
     """
 
     @staticmethod
@@ -646,3 +678,4 @@ class T(object):
         elif 2 < length < max_len:
             return string + ' ' * (max_len - length)
         return string
+
