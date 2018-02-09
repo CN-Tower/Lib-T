@@ -14,7 +14,7 @@ if sys.version[0] != '2':
 
 class T(object):
 
-    __version = 'V1.1.4'
+    __version = 'V2.0.0'
 
     @staticmethod
     def info():
@@ -44,31 +44,30 @@ class T(object):
                      10: T.drop                11: T.pluck                
                      12: T.every               13: T.some                
                      14: T.list                15: T.dump
-                     16: T.size                17: T.replace
-                     18: T.iscan               19: T.log
-                     20: T.timer               21: T.now
-                     22: T.help                23: T.xyz
+                     16: T.replace             17: T.iscan               
+                     18: T.log                 19: T.timer               
+                     20: T.now                 21: T.help                
 ===================================================================================
     """
 
     @staticmethod
-    def index(expected, _list):
+    def index(predicate, _list):
         if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
-            if expected in _list:
-                return _list.index(expected)
-            elif isinstance(expected, dict):
+            if predicate in _list:
+                return _list.index(predicate)
+            elif isinstance(predicate, dict):
                 for i in range(0, len(_list)):
                     tmp_bool = True
-                    for key in expected:
-                        if key not in _list[i] or expected[key] != _list[i][key]:
+                    for key in predicate:
+                        if key not in _list[i] or predicate[key] != _list[i][key]:
                             tmp_bool = False
                             break
                     if tmp_bool:
                         return i
                 return -1
-            elif bool(expected) and 'function' in str(type(expected)):
+            elif bool(predicate) and 'function' in str(type(predicate)):
                 for i in range(0, len(_list)):
-                    if expected(_list[i]):
+                    if predicate(_list[i]):
                         return i
             return -1
         return -1
@@ -90,8 +89,8 @@ class T(object):
     """
 
     @staticmethod
-    def find(expected, _list):
-        idx = T.index(expected, _list)
+    def find(predicate, _list):
+        idx = T.index(predicate, _list)
         if idx != -1:
             return _list[idx]
         return None
@@ -115,17 +114,42 @@ class T(object):
     """
 
     @staticmethod
-    def filter(x):
-        pass
-    __filter = """"""
+    def filter(predicate, _list):
+        tmp_list = []
+        while True:
+            index = T.index(predicate, _list)
+            if index == -1:
+                break
+            else:
+                tmp_list.append(_list[index])
+                if index < len(_list) - 1:
+                    _list = _list[index + 1:]
+                else:
+                    break
+        return tmp_list
+    __filter = """
+    ### T.filter
+        Looks through each value in the list, returning an array of all the values that
+        pass a truth test (predicate).
+        eg:
+            from Tools import T
+            persons = [{"name": "Tom", "age": 20},
+                       {"name": "Jerry", "age": 20},
+                       {"name": "Jerry", "age": 35}]
+            
+            Jerry = T.filter({"age": 20}, persons)
+            Mary = T.filter(lambda x: x['name'] == 'Jerry', persons)
+            print(Jerry)  # => [{'age': 20, 'name': 'Tom'}, {'age': 20, 'name': 'Jerry'}]
+            print(Mary)   # => [{'age': 20, 'name': 'Jerry'}, {'age': 35, 'name': 'Jerry'}]
+    """
 
     @staticmethod
-    def reject(expected, _list):
-        index = T.index(expected, _list)
+    def reject(predicate, _list):
+        index = T.index(predicate, _list)
         if index != -1:
             tmp_list = copy.deepcopy(_list)
             del tmp_list[index]
-            return T.reject(expected, tmp_list)
+            return T.reject(predicate, tmp_list)
         return _list
     __reject = """
     ### T.reject
@@ -147,12 +171,19 @@ class T(object):
     @staticmethod
     def reduce(*args):
         return reduce(*args)
-    __reduce = """"""
+    __reduce = """
+    ### T.reduce
+        Returns the buildIn method 'reduce', in python 3 the 'reduce' is imported from functools.
+        eg:
+            from Tools import T
+            num_list = [1 , 2, 3, 4]
+            print(T.reduce(lambda a, b: a + b, num_list))  # => 10
+    """
 
     @staticmethod
-    def contains(expected, _list):
-        idx = T.index(expected, _list)
-        return idx != -1
+    def contains(predicate, _list):
+        index = T.index(predicate, _list)
+        return index != -1
     __contains = """
     ### T.contains
         Returns true if the value is present in the list.
@@ -170,61 +201,91 @@ class T(object):
     """
 
     @staticmethod
-    def flatten(x):
-        pass
-    __flatten = """"""
+    def flatten(_list, is_deep=False):
+        if _list and isinstance(_list, list):
+            tmp_list = []
+            for item in _list:
+                if isinstance(item, list):
+                    if is_deep:
+                        tmp_list += T.flatten(item, True)
+                    else:
+                        tmp_list += item
+                else:
+                    tmp_list.append(item)
+            return tmp_list
+        return _list
+    __flatten = """
+    ### T.flatten
+        Flattens a nested array (the nesting can be to any depth). If you pass shallow,
+        the array will only be flattened a single level.
+        eg:
+            from Tools import T
+            flt_list_01 = T.flatten([1, [2], [3, [[4]]]])
+            flt_list_02 = T.flatten([1, [2], [3, [[4]]]], True)
+            print (flt_list_01)  # => [1, 2, 3, [[4]]]
+            print (flt_list_02)  # => [1, 2, 3, 4];
+    """
 
     @staticmethod
-    def each(x):
-        pass
-    __each = """"""
+    def each(*args):
+        return list(map(*args))
+    __each = """
+    ### T.each
+        Produces a new values list by mapping each value in list through a transformation
+        function (iteratee). 
+        eg:
+            from Tools import T
+            num_list = [1 , 2, 3, 4]
+            list_10 = T.each(lambda x: x % 2, num_list)
+            print(list_10)  #=> [1, 0, 1, 0]
+    """
 
     @staticmethod
-    def uniq(expected, _list=None):
-        is_no_expected = False
+    def uniq(predicate, _list=None):
+        is_no_predicate = False
         if _list is None:
-            _list = expected
-            is_no_expected = True
+            _list = predicate
+            is_no_predicate = True
         if isinstance(_list, tuple):
             _list = list(_list)
         if bool(_list) and isinstance(_list, list):
             tmp_list = copy.deepcopy(_list)
-            if is_no_expected:
+            if is_no_predicate:
                 for i in range(0, len(tmp_list)):
                     if len(tmp_list) <= i + 1:
                         break
                     tmp_list = tmp_list[:i + 1] + T.reject(tmp_list[i], tmp_list[i + 1:])
             else:
-                index = T.index(expected, tmp_list)
+                index = T.index(predicate, tmp_list)
                 if index != -1 and index + 1 < len(tmp_list):
-                    tmp_list = tmp_list[:index + 1] + T.reject(expected, tmp_list[index + 1:])
+                    tmp_list = tmp_list[:index + 1] + T.reject(predicate, tmp_list[index + 1:])
             return tmp_list
         return _list
     __uniq = """
-        ### T.uniq
-            Produces a duplicate-free version of the array.
-            In particular only the first occurence of each value is kept.
-            eg:
-                from Tools import T
-                persons00 = ("Tom", "Tom", "Jerry")
-                persons01 = ["Tom", "Tom", "Jerry"]
-                persons02 = [{"name": "Tom", "age": 12, "sex": "m"},
-                             {"name": "Tom", "age": 20, "sex": "m"},
-                             {"name": "Mary", "age": 35, "sex": "f"}]
-                demo_list = [False, [], False, True, [], {}, False, '']
+    ### T.uniq
+        Produces a duplicate-free version of the array.
+        In particular only the first occurence of each value is kept.
+        eg:
+            from Tools import T
+            persons00 = ("Tom", "Tom", "Jerry")
+            persons01 = ["Tom", "Tom", "Jerry"]
+            persons02 = [{"name": "Tom", "age": 12, "sex": "m"},
+                         {"name": "Tom", "age": 20, "sex": "m"},
+                         {"name": "Mary", "age": 35, "sex": "f"}]
+            demo_list = [False, [], False, True, [], {}, False, '']
 
-                unique_persons00 = T.uniq(persons00)
-                unique_persons01 = T.uniq(persons01)
-                unique_demo_list = T.uniq(demo_list)
-                one_Tom = T.uniq({"name": "Tom"}, persons02)
-                one_mail = T.uniq(lambda x: x['sex'] == "m", persons02)
+            unique_persons00 = T.uniq(persons00)
+            unique_persons01 = T.uniq(persons01)
+            unique_demo_list = T.uniq(demo_list)
+            one_Tom = T.uniq({"name": "Tom"}, persons02)
+            one_mail = T.uniq(lambda x: x['sex'] == "m", persons02)
 
-                print(unique_persons00)  # => ["Jerry", "Tom"]
-                print(unique_persons01)  # => ["Jerry", "Tom"]
-                print(unique_demo_list)  # => [False, [], True, {}, '']
-                print(one_Tom)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'}, {'age': 35, 'name': 'Mary', 'sex': 'f'}]
-                print(one_mail)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'}, {'age': 35, 'name': 'Mary', 'sex': 'f'}]
-        """
+            print(unique_persons00)  # => ["Jerry", "Tom"]
+            print(unique_persons01)  # => ["Jerry", "Tom"]
+            print(unique_demo_list)  # => [False, [], True, {}, '']
+            print(one_Tom)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'}, {'age': 35, 'name': 'Mary', 'sex': 'f'}]
+            print(one_mail)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'}, {'age': 35, 'name': 'Mary', 'sex': 'f'}]
+    """
 
     @staticmethod
     def drop(_list, is_drop_0=False):
@@ -289,13 +350,13 @@ class T(object):
     """
 
     @staticmethod
-    def every(expected, _list):
+    def every(predicate, _list):
         if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
             for item in _list:
-                if 'function' in str(type(expected)):
-                    if not bool(expected(item)):
+                if 'function' in str(type(predicate)):
+                    if not bool(predicate(item)):
                         return False
-                elif expected != bool(item):
+                elif predicate != bool(item):
                     return False
             return True
         return False
@@ -317,13 +378,13 @@ class T(object):
     """
 
     @staticmethod
-    def some(expected, _list):
+    def some(predicate, _list):
         if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
             for item in _list:
-                if 'function' in str(type(expected)):
-                    if bool(expected(item)):
+                if 'function' in str(type(predicate)):
+                    if bool(predicate(item)):
                         return True
-                elif expected == bool(item):
+                elif predicate == bool(item):
                     return True
             return False
         return False
@@ -398,14 +459,16 @@ class T(object):
     """
 
     @staticmethod
-    def size(x):
-        pass
-    __size = """"""
-
-    @staticmethod
-    def replace(x):
-        pass
-    __replace = """"""
+    def replace(*args):
+        return re.sub(*args)
+    __replace = """
+    ### T.replace
+        Replace sub string of the origin string with re.sub()
+        eg:
+            from Tools import T
+            info = 'Hello I'm Tom!'
+            print(T.replace('Tom', 'Jack', info))  # => True
+    """
 
     @staticmethod
     def iscan(exp):
@@ -418,9 +481,11 @@ class T(object):
         return False
     __iscan = """
     ### T.iscan
-        Test is the stringlized expression valid.
+        Test is the expression valid, a boolean value will be returned.
         eg:
-
+            from Tools import T
+            print(T.iscan(int('a')))  # => False
+            print(T.iscan(int(5)))  # => True
     """
 
     @staticmethod
@@ -479,7 +544,7 @@ class T(object):
         return is_time_out
     __timer = """
     ### T.timer
-                Set a interval and times limit.
+        Set a timer with interval and timeout limit.
         eg: 
             from Tools import T
             count = 0
@@ -525,12 +590,13 @@ class T(object):
                 print (docs['info'])
             elif not ('info' in kwargs and kwargs['info']):
                 print ('')
-                hints = map(lambda x: str(keys.index(x)) + ': T.' + x, keys)
+                hints = map(lambda x: T.__fixstrlen(T.__fixstrlen(str(keys.index(x))) + ': T.' + x), keys)
                 end = 0
                 while True:
                     sta = end
-                    end = end + 8
+                    end = end + 5
                     if end > len(hints):
+                        hints.append(' ' * (end - len(hints)) * 14)
                         end = len(hints)
                     print '[' + reduce(lambda a, b: a + ' ' + b, hints[sta:end]) + ']'
                     if end == len(hints):
@@ -551,6 +617,7 @@ class T(object):
     ### T.help
         Return the FuncLib or it's method doc
         eg:
+            from Tools import T
             T.help('index')
             # => 
 ===========================================================================
@@ -559,7 +626,6 @@ class T(object):
 """ + __index + """
 ===========================================================================
         """
-    __xyz = """"""
 
     @staticmethod
     def __clear():
@@ -568,3 +634,11 @@ class T(object):
         else:
             os.system('clear')
 
+    @staticmethod
+    def __fixstrlen(string):
+        length = len(string)
+        if length == 1:
+            return '0' + string
+        elif length > 2 < 14:
+            return string + ' ' * (14 - length)
+        return string
