@@ -646,5 +646,3 @@ class T(object):
         elif 2 < length < max_len:
             return string + ' ' * (max_len - length)
         return string
-
-T.help()
