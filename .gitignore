@@ -2,3 +2,4 @@
 /dist
 /build
 /funclib.egg-info
+funclib/*.pyc
