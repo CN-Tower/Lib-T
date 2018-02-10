@@ -1,6 +1,5 @@
 # FuncLib
 A data processing methods lib of python.
-
 ## About
 ```
     ===================================================================================
@@ -27,7 +26,6 @@ A data processing methods lib of python.
                          22: T.now                 23: T.help
     ===================================================================================
 ```
-
 ## Quick Start
 ```
 $ pip install funclib
@@ -35,7 +33,6 @@ $ python
 >>> from funclib import T
 >>> T.help()
 ```
-
 ## Methods
  * [T.index   ](#tindex)
  * [T.find    ](#tfind)
@@ -60,7 +57,6 @@ $ python
  * [T.timer   ](#ttimer)
  * [T.now     ](#tnow)
  * [T.help    ](#thelp)
-
 ## Document
 ### T.index
 ```
