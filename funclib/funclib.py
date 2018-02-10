@@ -199,8 +199,8 @@ class T(object):
         Returns true if the value is present in the list.
         eg:
             from funclib import T
-            persons = [{"name": "Tom", "age": 12},\
-                       {"name": "Jerry", "age": 20},\
+            persons = [{"name": "Tom", "age": 12},
+                       {"name": "Jerry", "age": 20},
                        {"name": "Mary", "age": 35}]
 
             is_contains_Jerry = T.contains({"name": "Jerry", "age": 12}, persons)
@@ -573,11 +573,11 @@ class T(object):
         Show log clear in console.
         eg:
             from funclib import T
-            T.log([{"name": "Tom", "hobbies": ["sing", "running"]}, {"name": "Jerry", "hobbies": []}])
-
-            # =>
+            persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
+                       {"name": "Jerry", "hobbies": []}]
+            T.log(persons)  # =>
 ===========================================================================
-                            """ + __log_title + """
+                        """ + __log_title + """
 ---------------------------------------------------------------------------
 [
   {
