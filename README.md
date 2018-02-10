@@ -7,7 +7,7 @@
                                  Author: @CN-Tower
                               Create At: 2018-2-2
                               Update At: 2018-2-10
-                                Version: V2.0.2
+                                Version: V2.0.3
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           0: T.info                 1: T.index
@@ -352,7 +352,7 @@ $ python
 
         # =>
         ===========================================================================
-                                    FuncLib ( V2.0.0 )
+                                    FuncLib ( V2.0.3 )
         ---------------------------------------------------------------------------
         [
           {
@@ -406,7 +406,7 @@ $ python
         T.help('index')
         # =>
     ===========================================================================
-                            FuncLib ( V2.0.0 ) --> T.index
+                            FuncLib ( V2.0.3 ) --> T.index
     ---------------------------------------------------------------------------
         Looks through the list and returns the item index. If no match is found,
         or if list is empty, -1 will be returned.
