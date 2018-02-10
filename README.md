@@ -1,6 +1,4 @@
 # FuncLib
-A data processing methods lib of python.
-## About
 ```
     ===================================================================================
                                         Func-Lib
