@@ -13,7 +13,7 @@ if sys.version[0] != '2':
 
 class T(object):
     __version = 'V2.0.2'
-    __log_title = 'FuncLib ( ' + __version + ' )'
+    __log_title = 'FuncLib ( ' + __version + ' ) --> T.log'
     __log_title_fix = 'FuncLib ( ' + __version + ' ) --> T.'
 
     @staticmethod
