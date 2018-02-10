@@ -1,50 +1,7 @@
 # FuncLib
-
 A data processing methods lib of python.
 
 ## About
-     Author: @CN-Tower
-    Version: V2.0.1
-  Create At: 2018-2-2
-  Update At: 2018-2-10
-     GitHub: http://github.com/CN-Tower/FuncLib
-
-## Quick Start
-```
-$ pip install funclib
-$ python
->>> from funclib import T
->>> T.help()
-```
-## Methods
- * [T.info    ](#tinfo)
- * [T.index   ](#tindex)
- * [T.find    ](#tfind)
- * [T.filter  ](#tfilter)
- * [T.reject  ](#treject)
- * [T.reduce  ](#treduce)
- * [T.contains](#tcontains)
- * [T.flatten ](#tflatten)
- * [T.each    ](#teach)
- * [T.uniq    ](#tuniq)
- * [T.drop    ](#tdrop)
- * [T.pluck   ](#tpluck)
- * [T.every   ](#tevery)
- * [T.some    ](#tsome)
- * [T.list    ](#tlist)
- * [T.dump    ](#tdump)
- * [T.clone   ](#tclone)
- * [T.test    ](#ttest)
- * [T.replace ](#treplace)
- * [T.iscan   ](#tiscan)
- * [T.log     ](#tlog)
- * [T.timer   ](#ttimer)
- * [T.now     ](#tnow)
- * [T.help    ](#thelp)
-
-## Document
-
-### T.info
 ```
     ===================================================================================
                                         Func-Lib
@@ -70,6 +27,41 @@ $ python
                          22: T.now                 23: T.help
     ===================================================================================
 ```
+
+## Quick Start
+```
+$ pip install funclib
+$ python
+>>> from funclib import T
+>>> T.help()
+```
+
+## Methods
+ * [T.index   ](#tindex)
+ * [T.find    ](#tfind)
+ * [T.filter  ](#tfilter)
+ * [T.reject  ](#treject)
+ * [T.reduce  ](#treduce)
+ * [T.contains](#tcontains)
+ * [T.flatten ](#tflatten)
+ * [T.each    ](#teach)
+ * [T.uniq    ](#tuniq)
+ * [T.drop    ](#tdrop)
+ * [T.pluck   ](#tpluck)
+ * [T.every   ](#tevery)
+ * [T.some    ](#tsome)
+ * [T.list    ](#tlist)
+ * [T.dump    ](#tdump)
+ * [T.clone   ](#tclone)
+ * [T.test    ](#ttest)
+ * [T.replace ](#treplace)
+ * [T.iscan   ](#tiscan)
+ * [T.log     ](#tlog)
+ * [T.timer   ](#ttimer)
+ * [T.now     ](#tnow)
+ * [T.help    ](#thelp)
+
+## Document
 ### T.index
 ```
     Looks through the list and returns the item index. If no match is found,
