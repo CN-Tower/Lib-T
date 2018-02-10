@@ -1,2 +1,1 @@
-from funclib import *
-
+__all__ = ['funclib']
