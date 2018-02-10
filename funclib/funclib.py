@@ -12,7 +12,7 @@ if sys.version[0] != '2':
 
 
 class T(object):
-    __version = 'V2.0.1'
+    __version = 'V2.0.2'
     __log_title = 'FuncLib ( ' + __version + ' )'
     __log_title_fix = 'FuncLib ( ' + __version + ' ) --> T.'
 
@@ -198,8 +198,8 @@ class T(object):
         Returns true if the value is present in the list.
         eg:
             from funclib import T
-            persons = [{"name": "Tom", "age": 12},
-                       {"name": "Jerry", "age": 20},
+            persons = [{"name": "Tom", "age": 12},\
+                       {"name": "Jerry", "age": 20},\
                        {"name": "Mary", "age": 35}]
 
             is_contains_Jerry = T.contains({"name": "Jerry", "age": 12}, persons)
@@ -533,8 +533,8 @@ class T(object):
         Replace sub string of the origin string with re.sub()
         eg:
             from funclib import T
-            info = 'Hello I'm Tom!'
-            print(T.replace('Tom', 'Jack', info))  # => True
+            greetings = 'Hello I\'m Tom!'
+            print(T.replace(r'Tom', 'Jack', greetings))  # => Hello I'm Jack!
     """
 
     @staticmethod
@@ -650,42 +650,52 @@ class T(object):
         docs_info = T.info()
         keys = docs_info['keys']
         docs = docs_info['docs']
-        max_len = max(T.each(lambda x: len(x), keys)) + 6
+        max_key_len = max(T.each(lambda x: len(x), keys)) + 6
         if len(args) > 0:
+            is_show_hint = False
             if args[0] in keys:
-                T.__clear()
-                T.log(docs[args[0]], T.__log_title_fix + args[0])
+                T.clear()
+                if args[0] == 'info':
+                    print docs['info']
+                else:
+                    is_show_hint = True
+                    T.log(docs[args[0]], T.__log_title_fix + args[0])
             if 'keep' in kwargs and kwargs['keep']:
-                T.help(**kwargs)
+                T.help(hint=is_show_hint, **kwargs)
         else:
             if not ('keep' in kwargs and kwargs['keep']):
-                T.__clear()
+                T.clear()
                 print (docs['info'])
-            elif not ('info' in kwargs and kwargs['info']):
+            elif 'hint' in kwargs and kwargs['hint']:
                 print ('')
-                hints = T.each(lambda x: T.__fixstrlen(T.__fixstrlen(str(keys.index(x))) + ': T.' + x, max_len), keys)
+                hints = T.each(lambda x: T.__fixstr(
+                    T.__fixstr(str(keys.index(x))) + x, keys.index(x) % row_cols + 1, max_key_len
+                ), keys)
                 end = 0
                 while True:
                     sta = end
                     end = end + row_cols
                     if end > len(hints):
-                        hints.append(' ' * (end - len(hints)) * max_len + ' ')
+                        hints.append(' ' * (end - len(hints)) * max_key_len + ' ')
                         end = len(hints)
                     print '[ ' + reduce(lambda a, b: a + ' ' + b, hints[sta:end]) + ']'
                     if end == len(hints):
                         break
                 print ('')
-            idx = raw_input('Input a index (Nothing input will return): ')
+            idx = raw_input('Input a method or it\'s index (Nothing input will Return!): ')
             if idx:
                 if T.iscan('int(%s)' % idx) and int(idx) in range(0, len(keys)):
-                    T.__clear()
+                    T.clear()
+                    is_show_hint = False
                     key = keys[int(idx)]
                     if idx == '0':
                         print (docs[key])
-                        return T.help(keep=True, info=True)
                     else:
+                        is_show_hint = True
                         T.log(docs[key], T.__log_title_fix + key)
-                T.help(keep=True)
+                    T.help(keep=True, hint=is_show_hint)
+                else:
+                    T.help(idx, keep=True)
 
     __help = """
     ### T.help
@@ -702,17 +712,24 @@ class T(object):
         """
 
     @staticmethod
-    def __clear():
+    def __fixstr(string, column=0, max_len=14):
+        str_len = len(string)
+        tmp_str = string
+        if column == 0:
+            tmp_str = string + ': T.'
+            if str_len == 1:
+                tmp_str = '0' + tmp_str
+        elif str_len < max_len:
+            tmp_str = string + ' ' * (max_len - str_len - 1)
+            if column == 1:
+                tmp_str = tmp_str + ' '
+            elif column == 3:
+                tmp_str = tmp_str[:-2]
+        return tmp_str
+
+    @staticmethod
+    def clear():
         if platform.system() == "Windows":
             os.system('cls')
         else:
             os.system('clear')
-
-    @staticmethod
-    def __fixstrlen(string, max_len=14):
-        length = len(string)
-        if length == 1:
-            return ' ' + string
-        elif 2 < length < max_len:
-            return string + ' ' * (max_len - length)
-        return string
