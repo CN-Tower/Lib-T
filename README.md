@@ -4,7 +4,7 @@ A data processing methods lib of python.
 
 ## About
      Author: @CN-Tower
-    Version: V2.0.0
+    Version: V2.0.1
   Create At: 2018-2-2
   Update At: 2018-2-10
      GitHub: http://github.com/CN-Tower/FuncLib
@@ -248,15 +248,17 @@ $ python
     Short-circuits and stops traversing the list if a false element is found.
     eg:
         from funclib import T
-        tmp_list = [0, '', 3, None]
+        num_list = [1, 1, 2, 3, 5, 8]
         persons = [{"name": "Tom", "age": 12, "sex": "m"},
                    {"name": "Jerry", "age": 20, "sex": "m"},
                    {"name": "Mary", "age": 35, "sex": "f"}]
 
-        every_true = T.every(True, tmp_list)
-        is_all_male = T.every(lambda x: x['sex'] == "m", persons)
-        print(every_true)   # => False
-        print(is_all_male)  # => False
+        is_all_five = T.every(5, num_list)
+        is_all_male = T.every({"sex": "m"}, persons)
+        is_all_adult = T.every(lambda x: x['age'] > 18, persons)
+        print(is_all_five)   # => False
+        print(is_all_male)   # => False
+        print(is_all_adult)  # => False
 
 ```
 ### T.some
@@ -265,16 +267,17 @@ $ python
     Short-circuits and stops traversing the list if a true element is found.
     eg:
         from funclib import T
-        tmp_list = [0, '', 3, None]
+        num_list = [1, 1, 2, 3, 5, 8]
         persons = [{"name": "Tom", "age": 12, "sex": "m"},
                    {"name": "Jerry", "age": 20, "sex": "m"},
                    {"name": "Mary", "age": 35, "sex": "f"}]
 
-        some_true = T.some(True, tmp_list)
-        is_some_female = T.some(lambda x: x['sex'] == "f", persons)
-
-        print(some_true)       # => True
-        print(is_some_female)  # => True
+        is_any_five = T.some(5, num_list)
+        is_any_male = T.some({"sex": "m"}, persons)
+        is_any_adult = T.some(lambda x: x['age'] > 18, persons)
+        print(is_any_five)   # => True
+        print(is_any_male)   # => True
+        print(is_any_adult)  # => True
 
 ```
 ### T.list
