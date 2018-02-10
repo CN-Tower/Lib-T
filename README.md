@@ -7,7 +7,7 @@
                                  Author: @CN-Tower
                               Create At: 2018-2-2
                               Update At: 2018-2-10
-                                Version: V2.0.0
+                                Version: V2.0.1
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           0: T.info                 1: T.index
