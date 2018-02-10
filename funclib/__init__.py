@@ -1,3 +1,1 @@
-import funclib
-
-__all__ = ['funclib']
+from funclib import *
