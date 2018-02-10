@@ -8,49 +8,50 @@ def do_release():
     T.clear()
     tmp_files = ['build', 'dist', 'funclib.egg-info']
     
-    T.log('Release Starting ...')
+    T.log('Release Starting !!! ...')
     
-    print('Deleting temporary files...')
+    print('\nDeleting temporary files !!! ...\n')
     if platform.system() == "Windows":
-        for file in tmp_files:
-            if os.path.exists(file):
-                if os.path.isfile(file):
-                    os.system('del ' + file)
+        for f in tmp_files:
+            if os.path.exists(f):
+                if os.path.isfile(f):
+                    os.system('del ' + f)
                 else:
-                    os.system('rd /s /q ' + file)
+                    os.system('rd /s /q ' + f)
     else:
-        for file in tmp_files:
-            os.system('rm -rf ' + file)
+        for f in tmp_files:
+            os.system('rm -rf ' + f)
     time.sleep(1)
-    print('Delete temporary files Success!')
+    print('\nDelete temporary files Success!')
     
-    print('Rename README.md to README.rst...')
+    print('\nRename README.md to README.rst !!! ...\n')
     if platform.system() == "Windows":
         os.system('ren README.md README.rst')
     else:
         os.system('mv README.md README.rst')
     time.sleep(1)
-    print('Rename README.md to README.rst Success!')
+    print('\nRename README.md to README.rst Success!')
     
-    print('Building Dist...')
+    print('\nBuilding Dist !!! ...\n')
     os.system('python setup.py sdist build')
     time.sleep(1)
-    print('Build Dist Success!')
+    print('\nBuild Dist Success!')
     
-    print('Release...')
+    print('\nRelease !!! ...\n')
     os.system('twine upload dist/*')
     time.sleep(1)
-    print('Release Success!')
+    print('\nRelease Success!')
     
-    print('Rename README.rst to README.md...')
+    print('\nRename README.rst to README.md !!! ...\n')
     if platform.system() == "Windows":
         os.system('ren README.rst README.md')
     else:
         os.system('mv README.rst README.md')
     time.sleep(1)
-    print('Rename README.rst to README.md Success!')
+    print('\nRename README.rst to README.md Success!\n')
     
     T.log('Congratulations, Release totaly Success!')
-    
+
+
 if __name__ == '__main__':
     do_release()
