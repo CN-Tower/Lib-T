@@ -13,7 +13,7 @@ if sys.version[0] != '2':
 
 
 class T(object):
-    __version = 'V2.0.3'
+    __version = 'V2.0.4'
     __log_title = 'FuncLib ( ' + __version + ' ) --> T.log'
     __log_title_fix = 'FuncLib ( ' + __version + ' ) --> T.'
 
@@ -558,8 +558,8 @@ class T(object):
     """
 
     @staticmethod
-    def log(msg='Have no Message!', title='FuncLib ( ' + __version + ' )', line_len=85):
-        title = isinstance(title, str) and title or str(title) or 'FuncLib ( ' + __version + ' )'
+    def log(msg='Have no Message!', title=__log_title, line_len=85):
+        title = isinstance(title, str) and title or str(title) or T.__log_title
         title = len(title) <= 35 and title or title[:35]
         line_b = '=' * line_len
         line_m = '-' * line_len
