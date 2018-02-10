@@ -339,8 +339,8 @@ $ python
     Test is the expression valid, a boolean value will be returned.
     eg:
         from funclib import T
-        print(T.iscan(int('a')))  # => False
-        print(T.iscan(int(5)))  # => True
+        print(T.iscan("int('a')"))  # => False
+        print(T.iscan("int('5')"))  # => True
 
 ```
 ### T.log
