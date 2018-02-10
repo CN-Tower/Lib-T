@@ -6,15 +6,13 @@ import copy
 import json
 import platform
 
-
 if sys.version[0] != '2':
     from functools import reduce
     raw_input = input
 
 
 class T(object):
-
-    __version = 'V2.0.0'
+    __version = 'V2.0.1'
     __log_title = 'FuncLib ( ' + __version + ' )'
     __log_title_fix = 'FuncLib ( ' + __version + ' ) --> T.'
 
@@ -27,6 +25,7 @@ class T(object):
         for key in keys:
             docs[key] = docs_vars[docs_keys[keys.index(key)]]
         return {'keys': keys, 'docs': docs}
+
     __info = """
 ===================================================================================
                                     Func-Lib
@@ -74,6 +73,7 @@ class T(object):
                         return i
             return -1
         return -1
+
     __index = """ 
     ### T.index
         Looks through the list and returns the item index. If no match is found,
@@ -97,6 +97,7 @@ class T(object):
         if idx != -1:
             return _list[idx]
         return None
+
     __find = """
     ### T.find
         Looks through each value in the list, returning the first one that passes
@@ -131,6 +132,7 @@ class T(object):
                 else:
                     break
         return ret_list
+
     __filter = """
     ### T.filter
         Looks through each value in the list, returning an array of all the values that
@@ -140,7 +142,7 @@ class T(object):
             persons = [{"name": "Tom", "age": 20},
                        {"name": "Jerry", "age": 20},
                        {"name": "Jerry", "age": 35}]
-            
+
             Jerry = T.filter({"age": 20}, persons)
             Mary = T.filter(lambda x: x['name'] == 'Jerry', persons)
             print(Jerry)  # => [{'age': 20, 'name': 'Tom'}, {'age': 20, 'name': 'Jerry'}]
@@ -155,6 +157,7 @@ class T(object):
             del tmp_list[index]
             return T.reject(predicate, tmp_list)
         return _list
+
     __reject = """
     ### T.reject
         Returns the values in list without the elements that the truth test (predicate) passes.
@@ -175,6 +178,7 @@ class T(object):
     @staticmethod
     def reduce(*args):
         return reduce(*args)
+
     __reduce = """
     ### T.reduce
         Returns the buildIn method 'reduce', in python 3 the 'reduce' is imported from functools.
@@ -188,6 +192,7 @@ class T(object):
     def contains(predicate, _list):
         index = T.index(predicate, _list)
         return index != -1
+
     __contains = """
     ### T.contains
         Returns true if the value is present in the list.
@@ -218,6 +223,7 @@ class T(object):
                     tmp_list.append(item)
             return tmp_list
         return _list
+
     __flatten = """
     ### T.flatten
         Flattens a nested array (the nesting can be to any depth). If you pass shallow,
@@ -233,6 +239,7 @@ class T(object):
     @staticmethod
     def each(*args):
         return list(map(*args))
+
     __each = """
     ### T.each
         Produces a new values list by mapping each value in list through a transformation
@@ -265,6 +272,7 @@ class T(object):
                     tmp_list = tmp_list[:index + 1] + T.reject(predicate, tmp_list[index + 1:])
             return tmp_list
         return _list
+
     __uniq = """
     ### T.uniq
         Produces a duplicate-free version of the array.
@@ -309,6 +317,7 @@ class T(object):
                         list_len -= 1
             return tmp_list
         return _list
+
     __drop = """
     ### T.drop
         Delete false values expect 0.
@@ -337,6 +346,7 @@ class T(object):
             if bool(opt) and "uniq" in opt and opt['uniq']:
                 tmp_body = T.uniq(tmp_body)
         return tmp_body
+
     __pluck = """
     ### T.pluck
         Pluck the list element of collections.
@@ -357,11 +367,16 @@ class T(object):
     def every(predicate, _list):
         if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
             for item in _list:
-                if 'function' in str(type(predicate)):
-                    if not bool(predicate(item)):
+                if predicate != item:
+                    if isinstance(predicate, dict):
+                        for key in predicate:
+                            if key not in item or predicate[key] != item[key]:
+                                return False
+                    elif 'function' in str(type(predicate)):
+                        if not bool(predicate(item)):
+                            return False
+                    else:
                         return False
-                elif predicate != bool(item):
-                    return False
             return True
         return False
     __every = """
@@ -370,44 +385,56 @@ class T(object):
         Short-circuits and stops traversing the list if a false element is found.
         eg:
             from funclib import T
-            tmp_list = [0, '', 3, None]
+            num_list = [1, 1, 2, 3, 5, 8]
             persons = [{"name": "Tom", "age": 12, "sex": "m"},
                        {"name": "Jerry", "age": 20, "sex": "m"},
                        {"name": "Mary", "age": 35, "sex": "f"}]
 
-            every_true = T.every(True, tmp_list)
-            is_all_male = T.every(lambda x: x['sex'] == "m", persons)
-            print(every_true)   # => False
-            print(is_all_male)  # => False
+            is_all_five = T.every(5, num_list)
+            is_all_male = T.every({"sex": "m"}, persons)
+            is_all_adult = T.every(lambda x: x['age'] > 18, persons)
+            print(is_all_five)   # => False
+            print(is_all_male)   # => False
+            print(is_all_adult)  # => False
     """
 
     @staticmethod
     def some(predicate, _list):
         if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
             for item in _list:
-                if 'function' in str(type(predicate)):
-                    if bool(predicate(item)):
-                        return True
-                elif predicate == bool(item):
+                if predicate != item:
+                    if isinstance(predicate, dict):
+                        tmp_bool = True
+                        for key in predicate:
+                            if key not in item or predicate[key] != item[key]:
+                                tmp_bool = False
+                        if tmp_bool:
+                            return True
+                    elif 'function' in str(type(predicate)):
+                        if bool(predicate(item)):
+                            return True
+                else:
                     return True
             return False
         return False
+
     __some = """
     ### T.some
         Returns true if any of the values in the list pass the predicate truth test.
         Short-circuits and stops traversing the list if a true element is found.
         eg:
             from funclib import T
-            tmp_list = [0, '', 3, None]
+            num_list = [1, 1, 2, 3, 5, 8]
             persons = [{"name": "Tom", "age": 12, "sex": "m"},
                        {"name": "Jerry", "age": 20, "sex": "m"},
                        {"name": "Mary", "age": 35, "sex": "f"}]
 
-            some_true = T.some(True, tmp_list)
-            is_some_female = T.some(lambda x: x['sex'] == "f", persons)
-
-            print(some_true)       # => True
-            print(is_some_female)  # => True
+            is_any_five = T.some(5, num_list)
+            is_any_male = T.some({"sex": "m"}, persons)
+            is_any_adult = T.some(lambda x: x['age'] > 18, persons)
+            print(is_any_five)   # => True
+            print(is_any_male)   # => True
+            print(is_any_adult)  # => True
     """
 
     @staticmethod
@@ -416,12 +443,14 @@ class T(object):
             if isinstance(val, list):
                 return val
             return [val]
+
         if len(values) == 0:
             return []
         elif len(values) == 1:
             return list_handler(values[0])
         else:
             return reduce(lambda a, b: list_handler(a) + list_handler(b), values)
+
     __list = """
     ### T.list
         Return now system time.
@@ -439,6 +468,7 @@ class T(object):
         if isinstance(_json, list) or isinstance(_json, dict) or isinstance(_json, tuple):
             return json.dumps(_json, sort_keys=True, indent=2)
         return _json
+
     __dump = """
     ### T.dump
         Return a formatted json string.
@@ -465,6 +495,7 @@ class T(object):
     @staticmethod
     def clone(obj):
         return copy.deepcopy(obj)
+
     __clone = """
     ### T.clone
         Create a deep-copied clone of the provided plain object.
@@ -481,6 +512,7 @@ class T(object):
     @staticmethod
     def test(pattern, origin):
         return re.search(pattern, origin) is not None
+
     __test = """
     ### T.test
         Check is the match successful, a boolean value will be returned.
@@ -495,6 +527,7 @@ class T(object):
     @staticmethod
     def replace(*args):
         return re.sub(*args)
+
     __replace = """
     ### T.replace
         Replace sub string of the origin string with re.sub()
@@ -508,11 +541,12 @@ class T(object):
     def iscan(exp):
         if isinstance(exp, str):
             try:
-                exec(exp)
+                exec (exp)
                 return True
             except:
                 return False
         return False
+
     __iscan = """
     ### T.iscan
         Test is the expression valid, a boolean value will be returned.
@@ -528,10 +562,11 @@ class T(object):
         title = len(title) <= 35 and title or title[:35]
         line_b = '=' * line_len
         line_m = '-' * line_len
-        title = ' ' * int((line_len - len(title))/2) + title
+        title = ' ' * int((line_len - len(title)) / 2) + title
         print('%s\n%s\n%s' % (line_b, title, line_m))
         print(T.dump(msg))
         print(line_b)
+
     __log = """
     ### T.log
         Show log clear in console.
@@ -576,6 +611,7 @@ class T(object):
                 break
             time.sleep(interval)
         return is_time_out
+
     __timer = """
     ### T.timer
         Set a timer with interval and timeout limit.
@@ -599,6 +635,7 @@ class T(object):
     @staticmethod
     def now():
         return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+
     __now = """
     ### T.now
         Return now system time.
@@ -649,6 +686,7 @@ class T(object):
                     else:
                         T.log(docs[key], T.__log_title_fix + key)
                 T.help(keep=True)
+
     __help = """
     ### T.help
         Return the FuncLib or it's method doc
