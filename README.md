@@ -332,8 +332,8 @@ $ python
     Replace sub string of the origin string with re.sub()
     eg:
         from funclib import T
-        info = 'Hello I'm Tom!'
-        print(T.replace('Tom', 'Jack', info))  # => True
+        greetings = 'Hello I\'m Tom!'
+        print(T.replace('Tom', 'Jack', greetings))  # => Hello I'm Jack!
 
 ```
 ### T.iscan
