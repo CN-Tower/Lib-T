@@ -17,8 +17,7 @@ def do_release():
                 else:
                     os.system('rd /s /q ' + file)
     else:
-        del_files = T.each(lambda x: pwd_path + '/' + x, tmp_files)
-        for file in del_files:
+        for file in tmp_files:
             os.system('rm -rf ' + file)
     time.sleep(1)
     
