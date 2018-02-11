@@ -13,7 +13,7 @@ if sys.version[0] != '2':
 
 
 class T(object):
-    __version = 'V2.0.4'
+    __version = 'V2.0.5'
     __log_title = 'FuncLib ( ' + __version + ' ) --> T.log'
     __log_title_fix = 'FuncLib ( ' + __version + ' ) --> T.'
 
@@ -43,13 +43,13 @@ class T(object):
                       4: T.reject               5: T.reduce
                       6: T.contains             7: T.flatten
                       8: T.each                 9: T.uniq
-                     10: T.drop                11: T.pluck                
-                     12: T.every               13: T.some                
-                     14: T.list                15: T.dump
-                     16: T.clone               17: T.test
-                     18: T.replace             19: T.iscan
-                     20: T.log                 21: T.timer               
-                     22: T.now                 23: T.help                
+                     10: T.pluck               11: T.pick
+                     12: T.every               13: T.some
+                     14: T.list                15: T.drop
+                     16: T.dump                17: T.clone
+                     18: T.test                19: T.replace
+                     20: T.iscan               21: T.log
+                     22: T.timer               23: T.now
 ===================================================================================
     """
 
@@ -136,8 +136,8 @@ class T(object):
 
     __filter = """
     ### T.filter
-        Looks through each value in the list, returning an array of all the values that
-        pass a truth test (predicate).
+        Looks through each value in the list, returning an array of all the values
+        that pass a truth test (predicate).
         eg:
             from funclib import T
             persons = [{"name": "Tom", "age": 20},
@@ -146,8 +146,10 @@ class T(object):
 
             Jerry = T.filter({"age": 20}, persons)
             Mary = T.filter(lambda x: x['name'] == 'Jerry', persons)
-            print(Jerry)  # => [{'age': 20, 'name': 'Tom'}, {'age': 20, 'name': 'Jerry'}]
-            print(Mary)   # => [{'age': 20, 'name': 'Jerry'}, {'age': 35, 'name': 'Jerry'}]
+            print(Jerry)  # => [{'age': 20, 'name': 'Tom'},
+                                {'age': 20, 'name': 'Jerry'}]
+            print(Mary)   # => [{'age': 20, 'name': 'Jerry'},
+                                {'age': 35, 'name': 'Jerry'}]
     """
 
     @staticmethod
@@ -161,7 +163,8 @@ class T(object):
 
     __reject = """
     ### T.reject
-        Returns the values in list without the elements that the truth test (predicate) passes.
+        Returns the values in list without the elements that the truth test (predicate)
+        passes.
         The opposite of filter.
         eg:
             from funclib import T
@@ -172,8 +175,10 @@ class T(object):
             not_Mary = T.reject({"name": "Mary"}, persons)
             adults = T.reject(lambda x: x['age'] < 18, persons)
 
-            print(not_Mary)  # => [{"age": 12, "name": "Tom"}, {"age": 20, "name": "Jerry"}]
-            print(adults)    # => [{"age": 20, "name": "Jerry"}, {"age": 35, "name": "Mary"}]
+            print(not_Mary)  # => [{"age": 12, "name": "Tom"},
+                                   {"age": 20, "name": "Jerry"}]
+            print(adults)    # => [{"age": 20, "name": "Jerry"},
+                                   {"age": 35, "name": "Mary"}]
     """
 
     @staticmethod
@@ -182,7 +187,8 @@ class T(object):
 
     __reduce = """
     ### T.reduce
-        Returns the buildIn method 'reduce', in python 3 the 'reduce' is imported from functools.
+        Returns the buildIn method 'reduce', in python 3 the 'reduce' is imported
+        from functools.
         eg:
             from funclib import T
             num_list = [1 , 2, 3, 4]
@@ -296,40 +302,10 @@ class T(object):
             print(unique_persons00)  # => ["Jerry", "Tom"]
             print(unique_persons01)  # => ["Jerry", "Tom"]
             print(unique_demo_list)  # => [False, [], True, {}, '']
-            print(one_Tom)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'}, {'age': 35, 'name': 'Mary', 'sex': 'f'}]
-            print(one_mail)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'}, {'age': 35, 'name': 'Mary', 'sex': 'f'}]
-    """
-
-    @staticmethod
-    def drop(_list, is_drop_0=False):
-        if bool(_list) and isinstance(_list, list):
-            tmp_list = T.clone(_list)
-            list_len = len(tmp_list)
-            for i in range(0, list_len):
-                for j in range(0, list_len):
-                    if j == list_len:
-                        break
-                    if is_drop_0:
-                        drop_condition = not bool(tmp_list[j])
-                    else:
-                        drop_condition = not bool(tmp_list[j]) and tmp_list[j] != 0
-                    if drop_condition:
-                        tmp_list.remove(tmp_list[j])
-                        list_len -= 1
-            return tmp_list
-        return _list
-
-    __drop = """
-    ### T.drop
-        Delete false values expect 0.
-        eg:
-            from funclib import T
-            tmp_list = [0, '', 3, None, [], {}, ['Yes'], 'Test']
-            drop_val = T.drop(tmp_list)
-            drop_val_and_0 = T.drop(tmp_list, True)
-
-            print(drop_val)        # => [0, 3, ['Yes'], 'Test']
-            print(drop_val_and_0)  # => [3, ['Yes'], 'Test']
+            print(one_Tom)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'},
+                                  {'age': 35, 'name': 'Mary', 'sex': 'f'}]
+            print(one_mail)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'},
+                                   {'age': 35, 'name': 'Mary', 'sex': 'f'}]
     """
 
     @staticmethod
@@ -362,6 +338,42 @@ class T(object):
 
             print(hobbies)      # => ["sing", "running", 'hiking', 'sing']
             print(hobbies_uniq) # => ["sing", "running", 'hiking']
+    """
+
+    @staticmethod
+    def pick(origin, *layers, **kwargs):
+        if 'new_layers' in kwargs:
+            layers = kwargs['new_layers']
+        if origin and layers:
+            if isinstance(origin, dict) and len(layers) > 0 and layers[0] in origin:
+                if len(layers) == 1:
+                    return origin[layers[0]]
+                elif len(layers) > 1:
+                    return T.pick(origin[layers[0]], new_layers=layers[1:])
+            if (isinstance(origin, list) or isinstance(origin, tuple)) and len(origin) > 0 and len(layers) > 0:
+                if T.iscan('int(%s)' % str(layers[0])) and 0 <= int(layers[0]) < len(origin):
+                    if len(layers) == 1:
+                        return origin[int(layers[0])]
+                    elif len(layers) > 1:
+                        return T.pick(origin[int(layers[0])], new_layers=layers[1:])
+        if 'default' in kwargs:
+            return kwargs['default']
+        else:
+            return None
+
+    __pick = """
+    ### T.pick
+        Check is the match successful, a boolean value will be returned.
+        eg:
+            from funclib import T
+            Tom = {"name": "Tom", "age": 12, "pets": [
+                {"species": "dog", "name": "Kitty"},
+                {"species": "cat", "name": "mimi"}
+            ]}
+            pets = T.pick(Tom, 'age')
+            first_pet_name = T.pick(Tom, 'pets', 0, 'name')
+            print(pets)             # => 12
+            print(first_pet_name)   # => Kitty
     """
 
     @staticmethod
@@ -421,8 +433,9 @@ class T(object):
 
     __some = """
     ### T.some
-        Returns true if any of the values in the list pass the predicate truth test.
-        Short-circuits and stops traversing the list if a true element is found.
+        Returns true if any of the values in the list pass the predicate
+        truth test. Short-circuits and stops traversing the list if a true
+        element is found.
         eg:
             from funclib import T
             num_list = [1, 1, 2, 3, 5, 8]
@@ -465,6 +478,38 @@ class T(object):
     """
 
     @staticmethod
+    def drop(_list, is_drop_0=False):
+        if bool(_list) and isinstance(_list, list):
+            tmp_list = T.clone(_list)
+            list_len = len(tmp_list)
+            for i in range(0, list_len):
+                for j in range(0, list_len):
+                    if j == list_len:
+                        break
+                    if is_drop_0:
+                        drop_condition = not bool(tmp_list[j])
+                    else:
+                        drop_condition = not bool(tmp_list[j]) and tmp_list[j] != 0
+                    if drop_condition:
+                        tmp_list.remove(tmp_list[j])
+                        list_len -= 1
+            return tmp_list
+        return _list
+
+    __drop = """
+    ### T.drop
+        Delete false values expect 0.
+        eg:
+            from funclib import T
+            tmp_list = [0, '', 3, None, [], {}, ['Yes'], 'Test']
+            drop_val = T.drop(tmp_list)
+            drop_val_and_0 = T.drop(tmp_list, True)
+
+            print(drop_val)        # => [0, 3, ['Yes'], 'Test']
+            print(drop_val_and_0)  # => [3, ['Yes'], 'Test']
+    """
+
+    @staticmethod
     def dump(_json):
         if isinstance(_json, list) or isinstance(_json, dict) or isinstance(_json, tuple):
             return json.dumps(_json, sort_keys=True, indent=2)
@@ -502,12 +547,15 @@ class T(object):
         Create a deep-copied clone of the provided plain object.
         eg:
             from funclib import T
-            persons = [{"name": "Tom", "age": 12}, {"name": "Jerry", "age": 20}]
+            persons = [{"name": "Tom", "age": 12},
+                       {"name": "Jerry", "age": 20}]
             persons_01 = persons
             persons_02 = T.clone(persons)
             T.find({'name': 'Tom'}, persons)['age'] = 18
-            print(persons_01)  # => [{"name": "Tom", "age": 18}, {"name": "Jerry", "age": 20}]
-            print(persons_02)  # => [{"name": "Tom", "age": 12}, {"name": "Jerry", "age": 20}]
+            print(persons_01)  # => [{"name": "Tom", "age": 18},
+                                     {"name": "Jerry", "age": 20}]
+            print(persons_02)  # => [{"name": "Tom", "age": 12},
+                                     {"name": "Jerry", "age": 20}]
     """
 
     @staticmethod
@@ -535,7 +583,7 @@ class T(object):
         eg:
             from funclib import T
             greetings = 'Hello I\'m Tom!'
-            print(T.replace(r'Tom', 'Jack', greetings))  # => Hello I'm Jack!
+            print(T.replace(r'Tom', 'Jack', greetings)) # => Hello I'm Jack!
     """
 
     @staticmethod
@@ -558,7 +606,7 @@ class T(object):
     """
 
     @staticmethod
-    def log(msg='Have no Message!', title=__log_title, line_len=85):
+    def log(msg='Have no Message!', title=__log_title, line_len=86):
         title = isinstance(title, str) and title or str(title) or T.__log_title
         title = len(title) <= 35 and title or title[:35]
         line_b = '=' * line_len
@@ -698,19 +746,12 @@ class T(object):
                 else:
                     T.help(idx, keep=True)
 
-    __help = """
-    ### T.help
-        Return the FuncLib or it's method doc
-        eg:
-            from funclib import T
-            T.help('index')
-            # => 
-===========================================================================
-                 """ + __log_title_fix + """index 
----------------------------------------------------------------------------
-""" + __index + """
-===========================================================================
-        """
+    @staticmethod
+    def clear():
+        if platform.system() == "Windows":
+            os.system('cls')
+        else:
+            os.system('clear')
 
     @staticmethod
     def __fixstr(string, column=0, max_len=14):
@@ -724,13 +765,8 @@ class T(object):
             tmp_str = string + ' ' * (max_len - str_len - 1)
             if column == 1:
                 tmp_str = tmp_str + ' '
+            elif column == 2:
+                tmp_str = tmp_str + ' '
             elif column == 3:
-                tmp_str = tmp_str[:-2]
+                tmp_str = tmp_str[:-1]
         return tmp_str
-
-    @staticmethod
-    def clear():
-        if platform.system() == "Windows":
-            os.system('cls')
-        else:
-            os.system('clear')
