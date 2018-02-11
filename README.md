@@ -7,7 +7,7 @@
                                  Author: @CN-Tower
                               Create At: 2018-2-2
                               Update At: 2018-2-10
-                                Version: V2.0.4
+                                Version: V2.0.5
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           0: T.info                 1: T.index
@@ -41,11 +41,12 @@ $ python
  * [T.flatten ](#tflatten)
  * [T.each    ](#teach)
  * [T.uniq    ](#tuniq)
- * [T.drop    ](#tdrop)
  * [T.pluck   ](#tpluck)
+ * [T.pick    ](#tpick)
  * [T.every   ](#tevery)
  * [T.some    ](#tsome)
  * [T.list    ](#tlist)
+ * [T.drop    ](#tdrop)
  * [T.dump    ](#tdump)
  * [T.clone   ](#tclone)
  * [T.test    ](#ttest)
@@ -199,19 +200,6 @@ $ python
         print(one_mail)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'}, {'age': 35, 'name': 'Mary', 'sex': 'f'}]
 
 ```
-### T.drop
-```
-    Delete false values expect 0.
-    eg:
-        from funclib import T
-        tmp_list = [0, '', 3, None, [], {}, ['Yes'], 'Test']
-        drop_val = T.drop(tmp_list)
-        drop_val_and_0 = T.drop(tmp_list, True)
-
-        print(drop_val)        # => [0, 3, ['Yes'], 'Test']
-        print(drop_val_and_0)  # => [3, ['Yes'], 'Test']
-
-```
 ### T.pluck
 ```
     Pluck the list element of collections.
@@ -227,6 +215,21 @@ $ python
         print(hobbies)      # => ["sing", "running", 'hiking', 'sing']
         print(hobbies_uniq) # => ["sing", "running", 'hiking']
 
+```
+### T.pick
+```
+    Check is the match successful, a boolean value will be returned.
+    eg:
+        from funclib import T
+        Tom = {"name": "Tom", "age": 12, "pets": [
+            {"species": "dog", "name": "Kitty"},
+            {"species": "cat", "name": "mimi"}
+        ]}
+        pets = T.pick(Tom, 'age')
+        first_pet_name = T.pick(Tom, 'pets', 0, 'name')
+        print(pets)             # => 12
+        print(first_pet_name)   # => Kitty
+            
 ```
 ### T.every
 ```
@@ -276,6 +279,19 @@ $ python
         print(T.list({}))     # => [{}]
         print(T.list(None))   # => [None]
         print(T.list('test')) # => ['test']
+
+```
+### T.drop
+```
+    Delete false values expect 0.
+    eg:
+        from funclib import T
+        tmp_list = [0, '', 3, None, [], {}, ['Yes'], 'Test']
+        drop_val = T.drop(tmp_list)
+        drop_val_and_0 = T.drop(tmp_list, True)
+
+        print(drop_val)        # => [0, 3, ['Yes'], 'Test']
+        print(drop_val_and_0)  # => [3, ['Yes'], 'Test']
 
 ```
 ### T.dump
@@ -352,7 +368,7 @@ $ python
 
         # =>
         ===========================================================================
-                                    FuncLib ( V2.0.4 )
+                                    FuncLib ( V2.0.5 )
         ---------------------------------------------------------------------------
         [
           {
@@ -406,7 +422,7 @@ $ python
         T.help('index')
         # =>
     ===========================================================================
-                            FuncLib ( V2.0.4 ) --> T.index
+                            FuncLib ( V2.0.5 ) --> T.index
     ---------------------------------------------------------------------------
         Looks through the list and returns the item index. If no match is found,
         or if list is empty, -1 will be returned.
