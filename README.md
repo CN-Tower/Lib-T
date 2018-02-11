@@ -15,13 +15,13 @@
                           4: T.reject               5: T.reduce
                           6: T.contains             7: T.flatten
                           8: T.each                 9: T.uniq
-                         10: T.drop                11: T.pluck
+                         10: T.pluck               11: T.pick
                          12: T.every               13: T.some
-                         14: T.list                15: T.dump
-                         16: T.clone               17: T.test
-                         18: T.replace             19: T.iscan
-                         20: T.log                 21: T.timer
-                         22: T.now                 23: T.help
+                         14: T.list                15: T.drop
+                         16: T.dump                17: T.clone
+                         18: T.test                19: T.replace
+                         20: T.iscan               21: T.log
+                         22: T.timer               23: T.now
     ===================================================================================
 ```
 ## Quick Start
