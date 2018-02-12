@@ -3,3 +3,4 @@
 /build
 /funclib.egg-info
 funclib/*.pyc
+/funclib/__pycache__/
