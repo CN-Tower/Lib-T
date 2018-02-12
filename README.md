@@ -7,7 +7,7 @@
                                  Author: @CN-Tower
                               Create At: 2018-2-2
                               Update At: 2018-2-11
-                                Version: V2.0.5
+                                Version: V2.0.6
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           0: T.info                 1: T.index
@@ -202,7 +202,7 @@ $ python
 ```
 ### T.pluck
 ```
-    Pluck the list element of collections.
+    Pluck the collections element.
     eg:
         from funclib import T
         persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
@@ -218,17 +218,25 @@ $ python
 ```
 ### T.pick
 ```
-    Check is the match successful, a boolean value will be returned.
+    Pick values form dict or list.
     eg:
         from funclib import T
-        Tom = {"name": "Tom", "age": 12, "pets": [
-            {"species": "dog", "name": "Kitty"},
-            {"species": "cat", "name": "mimi"}
-        ]}
+        Tom = {
+            "name": "Tom",
+            "age": 12,
+            "pets": [
+                {"species": "dog", "name": "Kitty"},
+                {"species": "cat", "name": "mimi"}
+            ]
+        }
         pets = T.pick(Tom, 'age')
-        first_pet_name = T.pick(Tom, 'pets', 0, 'name')
-        print(pets)             # => 12
-        print(first_pet_name)   # => Kitty
+        first_pet_species = T.pick(Tom, 'pets', [0], 'species')
+        find_mimi_species = T.pick(Tom, 'pets', {'name': 'mimi'}, 'species')
+        find_dog_name = T.pick(Tom, 'pets', lambda x: x['species'] == 'dog', 'name')
+        print(pets)               # => 12
+        print(first_pet_species)  # => dog
+        print(find_mimi_species)  # => cat
+        print(find_dog_name)      # => Kitty
             
 ```
 ### T.every
@@ -368,7 +376,7 @@ $ python
 
         # =>
         ===========================================================================
-                                    FuncLib ( V2.0.5 )
+                                    FuncLib ( V2.0.6 )
         ---------------------------------------------------------------------------
         [
           {
@@ -422,7 +430,7 @@ $ python
         T.help('index')
         # =>
     ===========================================================================
-                            FuncLib ( V2.0.5 ) --> T.index
+                            FuncLib ( V2.0.6 ) --> T.index
     ---------------------------------------------------------------------------
         Looks through the list and returns the item index. If no match is found,
         or if list is empty, -1 will be returned.

@@ -4,6 +4,7 @@ import os
 import platform
 import time
 
+
 def do_release():
     T.clear()
     tmp_files = ['build', 'dist', 'funclib.egg-info']

@@ -13,7 +13,7 @@ if sys.version[0] != '2':
 
 
 class T(object):
-    __version = 'V2.0.5'
+    __version = 'V2.0.6'
     __log_title = 'FuncLib ( ' + __version + ' ) --> T.log'
     __log_title_fix = 'FuncLib ( ' + __version + ' ) --> T.'
 
@@ -55,7 +55,7 @@ class T(object):
 
     @staticmethod
     def index(predicate, _list):
-        if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
+        if _list and T.typeof(_list, list, map, tuple):
             if predicate in _list:
                 return _list.index(predicate)
             elif isinstance(predicate, dict):
@@ -68,7 +68,7 @@ class T(object):
                     if tmp_bool:
                         return i
                 return -1
-            elif bool(predicate) and 'function' in str(type(predicate)):
+            elif T.typeof(predicate, 'func'):
                 for i in range(0, len(_list)):
                     if predicate(_list[i]):
                         return i
@@ -218,7 +218,7 @@ class T(object):
 
     @staticmethod
     def flatten(_list, is_deep=False):
-        if _list and isinstance(_list, list):
+        if _list and T.typeof(_list, list, map):
             tmp_list = []
             for item in _list:
                 if isinstance(item, list):
@@ -239,8 +239,8 @@ class T(object):
             from funclib import T
             flt_list_01 = T.flatten([1, [2], [3, [[4]]]])
             flt_list_02 = T.flatten([1, [2], [3, [[4]]]], True)
-            print (flt_list_01)  # => [1, 2, 3, [[4]]]
-            print (flt_list_02)  # => [1, 2, 3, 4];
+            print(flt_list_01)  # => [1, 2, 3, [[4]]]
+            print(flt_list_02)  # => [1, 2, 3, 4];
     """
 
     @staticmethod
@@ -264,9 +264,9 @@ class T(object):
         if _list is None:
             _list = predicate
             is_no_predicate = True
-        if isinstance(_list, tuple):
+        if T.typeof(_list, tuple, map):
             _list = list(_list)
-        if bool(_list) and isinstance(_list, list):
+        if _list and isinstance(_list, list):
             tmp_list = T.clone(_list)
             if is_no_predicate:
                 for i in range(0, len(tmp_list)):
@@ -314,7 +314,7 @@ class T(object):
             tmp_body = [body]
         else:
             tmp_body = body
-        if isinstance(tmp_body, list) or isinstance(tmp_body, tuple):
+        if T.typeof(tmp_body, list, map, tuple):
             for k in key:
                 field_k = T.each(lambda x: x[k], tmp_body)
                 if len(field_k) > 0:
@@ -326,7 +326,7 @@ class T(object):
 
     __pluck = """
     ### T.pluck
-        Pluck the list element of collections.
+        Pluck the collections element.
         eg:
             from funclib import T
             persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
@@ -345,17 +345,26 @@ class T(object):
         if 'new_layers' in kwargs:
             layers = kwargs['new_layers']
         if origin and layers:
-            if isinstance(origin, dict) and len(layers) > 0 and layers[0] in origin:
+            layer = layers[0]
+            if isinstance(origin, dict) and layer in origin:
                 if len(layers) == 1:
-                    return origin[layers[0]]
+                    return origin[layer]
                 elif len(layers) > 1:
-                    return T.pick(origin[layers[0]], new_layers=layers[1:])
-            if (isinstance(origin, list) or isinstance(origin, tuple)) and len(origin) > 0 and len(layers) > 0:
-                if T.iscan('int(%s)' % str(layers[0])) and 0 <= int(layers[0]) < len(origin):
+                    return T.pick(origin[layer], new_layers=layers[1:])
+            if T.typeof(origin, list, map, tuple):
+                if isinstance(layer, list) and len(layer) == 1 \
+                        and isinstance(layer[0], int) and -len(origin) <= layer[0] < len(origin):
                     if len(layers) == 1:
-                        return origin[int(layers[0])]
+                        return origin[layer[0]]
                     elif len(layers) > 1:
-                        return T.pick(origin[int(layers[0])], new_layers=layers[1:])
+                        return T.pick(origin[layer[0]], new_layers=layers[1:])
+                else:
+                    layer_val = T.find(layer, origin)
+                    if layer_val:
+                        if len(layers) == 1:
+                            return layer_val
+                        elif len(layers) > 1:
+                            return T.pick(layer_val, new_layers=layers[1:])
         if 'default' in kwargs:
             return kwargs['default']
         else:
@@ -363,29 +372,37 @@ class T(object):
 
     __pick = """
     ### T.pick
-        Check is the match successful, a boolean value will be returned.
+        Pick values form dict or list.
         eg:
             from funclib import T
-            Tom = {"name": "Tom", "age": 12, "pets": [
-                {"species": "dog", "name": "Kitty"},
-                {"species": "cat", "name": "mimi"}
-            ]}
+            Tom = {
+                "name": "Tom",
+                "age": 12,
+                "pets": [
+                    {"species": "dog", "name": "Kitty"},
+                    {"species": "cat", "name": "mimi"}
+                ]
+            }
             pets = T.pick(Tom, 'age')
-            first_pet_name = T.pick(Tom, 'pets', 0, 'name')
-            print(pets)             # => 12
-            print(first_pet_name)   # => Kitty
+            first_pet_species = T.pick(Tom, 'pets', [0], 'species')
+            find_mimi_species = T.pick(Tom, 'pets', {'name': 'mimi'}, 'species')
+            find_dog_name = T.pick(Tom, 'pets', lambda x: x['species'] == 'dog', 'name')
+            print(pets)               # => 12
+            print(first_pet_species)  # => dog
+            print(find_mimi_species)  # => cat
+            print(find_dog_name)      # => Kitty
     """
 
     @staticmethod
     def every(predicate, _list):
-        if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
+        if _list and T.typeof(_list, list, map, tuple):
             for item in _list:
                 if predicate != item:
                     if isinstance(predicate, dict):
                         for key in predicate:
                             if key not in item or predicate[key] != item[key]:
                                 return False
-                    elif 'function' in str(type(predicate)):
+                    elif T.typeof(predicate, 'func'):
                         if not bool(predicate(item)):
                             return False
                     else:
@@ -413,7 +430,7 @@ class T(object):
 
     @staticmethod
     def some(predicate, _list):
-        if bool(_list) and (isinstance(_list, list) or isinstance(_list, tuple)):
+        if _list and T.typeof(_list, list, map, tuple):
             for item in _list:
                 if predicate != item:
                     if isinstance(predicate, dict):
@@ -423,7 +440,7 @@ class T(object):
                                 tmp_bool = False
                         if tmp_bool:
                             return True
-                    elif 'function' in str(type(predicate)):
+                    elif T.typeof(predicate, 'func'):
                         if bool(predicate(item)):
                             return True
                 else:
@@ -552,6 +569,7 @@ class T(object):
             persons_01 = persons
             persons_02 = T.clone(persons)
             T.find({'name': 'Tom'}, persons)['age'] = 18
+            
             print(persons_01)  # => [{"name": "Tom", "age": 18},
                                      {"name": "Jerry", "age": 20}]
             print(persons_02)  # => [{"name": "Tom", "age": 12},
@@ -590,7 +608,7 @@ class T(object):
     def iscan(exp):
         if isinstance(exp, str):
             try:
-                exec (exp)
+                exec(exp)
                 return True
             except:
                 return False
@@ -606,14 +624,26 @@ class T(object):
     """
 
     @staticmethod
-    def log(msg='Have no Message!', title=__log_title, line_len=86):
-        title = isinstance(title, str) and title or str(title) or T.__log_title
-        title = len(title) <= 35 and title or title[:35]
+    def log(*msgs, **conf):
+        line_len = 87
+        title = T.__log_title
+        if 'title' in conf and str(conf['title']):
+            tt = str(conf['title'])
+            title = len(tt) <= 35 and tt or tt[:35]
+        if 'len' in conf and T.typeof(conf['len'], int) and conf['len'] > 40:
+            line_len = conf['len']
         line_b = '=' * line_len
         line_m = '-' * line_len
+        line_s = '- ' * int((line_len / 2))
         title = ' ' * int((line_len - len(title)) / 2) + title
         print('%s\n%s\n%s' % (line_b, title, line_m))
-        print(T.dump(msg))
+        if len(msgs) > 0:
+            for msg in msgs:
+                if msgs.index(msg) > 0:
+                    print(line_s)
+                print(T.dump(msg))
+        else:
+            print('Have no Message!')
         print(line_b)
 
     __log = """
@@ -623,6 +653,7 @@ class T(object):
             from funclib import T
             persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
                        {"name": "Jerry", "hobbies": []}]
+                       
             T.log(persons)  # =>
 ===========================================================================
                         """ + __log_title + """
@@ -645,7 +676,7 @@ class T(object):
 
     @staticmethod
     def timer(fn, times=60, interval=1):
-        if 'function' not in str(type(fn)) or not isinstance(times, int) or not isinstance(interval, int) \
+        if not T.typeof(fn, 'func') or not isinstance(times, int) or not isinstance(interval, int) \
                 or times < 1 or interval < 0:
             return
         is_time_out = False
@@ -673,6 +704,7 @@ class T(object):
                     return True
                 count += 1
                 print(count)
+                
             T.timer(fn, 10, 2)
             # =>
                 >>> 1  #at 0s
@@ -705,20 +737,20 @@ class T(object):
             if args[0] in keys:
                 T.clear()
                 if args[0] == 'info':
-                    print docs['info']
+                    print(docs['info'])
                 else:
                     is_show_hint = True
-                    T.log(docs[args[0]], T.__log_title_fix + args[0])
+                    T.log(docs[args[0]], title=T.__log_title_fix + args[0])
             if 'keep' in kwargs and kwargs['keep']:
                 T.help(hint=is_show_hint, **kwargs)
         else:
             if not ('keep' in kwargs and kwargs['keep']):
                 T.clear()
-                print (docs['info'])
+                print(docs['info'])
             elif 'hint' in kwargs and kwargs['hint']:
-                print ('')
-                hints = T.each(lambda x: T.__fixstr(
-                    T.__fixstr(str(keys.index(x))) + x, keys.index(x) % row_cols + 1, max_key_len
+                print('')
+                hints = T.each(lambda x: T.__fix_str(
+                    T.__fix_str(str(keys.index(x))) + x, keys.index(x) % row_cols + 1, max_key_len
                 ), keys)
                 end = 0
                 while True:
@@ -727,10 +759,10 @@ class T(object):
                     if end > len(hints):
                         hints.append(' ' * (end - len(hints)) * max_key_len + ' ')
                         end = len(hints)
-                    print '[ ' + reduce(lambda a, b: a + ' ' + b, hints[sta:end]) + ']'
+                    print('[ ' + reduce(lambda a, b: a + ' ' + b, hints[sta:end]) + ']')
                     if end == len(hints):
                         break
-                print ('')
+                print('')
             idx = raw_input('Input a method or it\'s index (Nothing input will Return!): ')
             if idx:
                 if T.iscan('int(%s)' % idx) and int(idx) in range(0, len(keys)):
@@ -738,10 +770,10 @@ class T(object):
                     is_show_hint = False
                     key = keys[int(idx)]
                     if idx == '0':
-                        print (docs[key])
+                        print(docs[key])
                     else:
                         is_show_hint = True
-                        T.log(docs[key], T.__log_title_fix + key)
+                        T.log(docs[key], title=T.__log_title_fix + key)
                     T.help(keep=True, hint=is_show_hint)
                 else:
                     T.help(idx, keep=True)
@@ -754,7 +786,16 @@ class T(object):
             os.system('clear')
 
     @staticmethod
-    def __fixstr(string, column=0, max_len=14):
+    def typeof(var, *types):
+        if len(types) > 0:
+            for _type in types:
+                if (isinstance(_type, type) and isinstance(var, _type))\
+                        or (_type == 'func' and 'function' in str(type(var))):
+                    return True
+        return False
+
+    @staticmethod
+    def __fix_str(string, column=0, max_len=14):
         str_len = len(string)
         tmp_str = string
         if column == 0:
