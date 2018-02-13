@@ -1,11 +1,12 @@
+#!/usr/bin/env python
 # -*- coding:utf-8 -*-
-from funclib import T
+from funclib.funclib import T
 import os
 import platform
 import time
 
 
-def do_release():
+def release():
     T.clear()
     tmp_files = ['build', 'dist', 'funclib.egg-info']
     
@@ -55,4 +56,4 @@ def do_release():
 
 
 if __name__ == '__main__':
-    do_release()
+    release()
