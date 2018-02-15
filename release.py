@@ -27,7 +27,7 @@ def release():
     print('\nDelete temporary files Success!')
     
     print('\nRename README.md to README.rst !!! ...\n')
-    if platform.system() == "Windows":
+    if platform.system() == "Windows" and os.path.exists(README.md):
         os.system('ren README.md README.rst')
     else:
         os.system('mv README.md README.rst')
@@ -40,7 +40,9 @@ def release():
     print('\nBuild Dist Success!')
     
     print('\nRelease !!! ...\n')
-    os.system('twine upload dist/*')
+    status_code = os.system('twine upload dist/*')
+    if status_code != 0:
+        raise Exception('Release Error, Please make sure you have installed the "twine" module already!')
     time.sleep(1)
     print('\nRelease Success!')
     

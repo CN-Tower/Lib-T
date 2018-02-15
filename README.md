@@ -7,7 +7,7 @@
                                  Author: @CN-Tower
                               Create At: 2018-2-2
                               Update At: 2018-2-11
-                                Version: V2.0.6
+                                Version: V2.0.7
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           0: T.info                 1: T.index
@@ -29,6 +29,7 @@
 $ pip install funclib
 $ python
 >>> from funclib import T
+>>> from funclib.funclib import T (If python 3)
 >>> T.help()
 ```
 ## Methods
@@ -296,10 +297,10 @@ $ python
         from funclib import T
         tmp_list = [0, '', 3, None, [], {}, ['Yes'], 'Test']
         drop_val = T.drop(tmp_list)
-        drop_val_and_0 = T.drop(tmp_list, True)
+        without_0 = T.drop(tmp_list, True)
 
-        print(drop_val)        # => [0, 3, ['Yes'], 'Test']
-        print(drop_val_and_0)  # => [3, ['Yes'], 'Test']
+        print(drop_val)  # => [3, ['Yes'], 'Test']
+        print(without_0)  # => [0, 3, ['Yes'], 'Test']
 
 ```
 ### T.dump
@@ -376,7 +377,7 @@ $ python
 
         # =>
         ===========================================================================
-                                    FuncLib ( V2.0.6 )
+                                    FuncLib ( V2.0.7 )
         ---------------------------------------------------------------------------
         [
           {
@@ -430,7 +431,7 @@ $ python
         T.help('index')
         # =>
     ===========================================================================
-                            FuncLib ( V2.0.6 ) --> T.index
+                            FuncLib ( V2.0.7 ) --> T.index
     ---------------------------------------------------------------------------
         Looks through the list and returns the item index. If no match is found,
         or if list is empty, -1 will be returned.

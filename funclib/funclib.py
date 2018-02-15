@@ -13,7 +13,7 @@ if sys.version[0] != '2':
 
 
 class T(object):
-    __version = 'V2.0.6'
+    __version = 'V2.0.7'
     __log_title = 'FuncLib ( ' + __version + ' ) --> T.log'
     __log_title_fix = 'FuncLib ( ' + __version + ' ) --> T.'
 
@@ -495,22 +495,16 @@ class T(object):
     """
 
     @staticmethod
-    def drop(_list, is_drop_0=False):
-        if bool(_list) and isinstance(_list, list):
-            tmp_list = T.clone(_list)
-            list_len = len(tmp_list)
-            for i in range(0, list_len):
-                for j in range(0, list_len):
-                    if j == list_len:
-                        break
-                    if is_drop_0:
-                        drop_condition = not bool(tmp_list[j])
-                    else:
-                        drop_condition = not bool(tmp_list[j]) and tmp_list[j] != 0
-                    if drop_condition:
-                        tmp_list.remove(tmp_list[j])
-                        list_len -= 1
-            return tmp_list
+    def drop(_list, is_without_0=False):
+        if bool(_list):
+            if isinstance(_list, tuple):
+                _list = list(_list)
+            if isinstance(_list, list):
+                tmp_list = []
+                for item in _list:
+                    if bool(item) or (is_without_0 and item == 0):
+                        tmp_list.append(item)
+                return tmp_list
         return _list
 
     __drop = """
@@ -520,10 +514,10 @@ class T(object):
             from funclib import T
             tmp_list = [0, '', 3, None, [], {}, ['Yes'], 'Test']
             drop_val = T.drop(tmp_list)
-            drop_val_and_0 = T.drop(tmp_list, True)
-
-            print(drop_val)        # => [0, 3, ['Yes'], 'Test']
-            print(drop_val_and_0)  # => [3, ['Yes'], 'Test']
+            without_0 = T.drop(tmp_list, True)
+            
+            print(drop_val)  # => [3, ['Yes'], 'Test']
+            print(without_0)  # => [0, 3, ['Yes'], 'Test']
     """
 
     @staticmethod
@@ -638,10 +632,10 @@ class T(object):
         title = ' ' * int((line_len - len(title)) / 2) + title
         print('%s\n%s\n%s' % (line_b, title, line_m))
         if len(msgs) > 0:
-            for msg in msgs:
-                if msgs.index(msg) > 0:
+            for i in range(0, len(msgs)):
+                if i > 0:
                     print(line_s)
-                print(T.dump(msg))
+                print(T.dump(msgs[i]))
         else:
             print('Have no Message!')
         print(line_b)
