@@ -27,7 +27,7 @@ def release():
     print('\nDelete temporary files Success!')
     
     print('\nRename README.md to README.rst !!! ...\n')
-    if platform.system() == "Windows" and os.path.exists(README.md):
+    if platform.system() == "Windows" and os.path.exists('README.md'):
         os.system('ren README.md README.rst')
     else:
         os.system('mv README.md README.rst')
