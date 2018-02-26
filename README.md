@@ -28,8 +28,7 @@
 ```
 $ pip install funclib
 $ python
->>> from funclib import T            #Python 2
->>> # from funclib.funclib import T  #Python 3
+>>> from funclib import T  # If Python3 uses "from funclib.funclib import T" instead!
 >>> T.help()
 ```
 ## Methods
