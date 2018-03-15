@@ -9,6 +9,7 @@ import platform
 
 if sys.version[0] != '2':
     from functools import reduce
+
     raw_input = input
 
 
@@ -34,7 +35,7 @@ class T(object):
 -----------------------------------------------------------------------------------
                              Author: @CN-Tower
                           Create At: 2018-2-2
-                          Update At: 2018-2-11
+                          Update At: 2018-3-15
                             Version: """ + version + """
                              GitHub: http://github.com/CN-Tower/FuncLib
 -----------------------------------------------------------------------------------
@@ -259,35 +260,41 @@ class T(object):
     """
 
     @staticmethod
-    def uniq(predicate, _list=None):
-        is_no_predicate = False
+    def uniq(_list, *args):
         tmp_list = T.clone(_list)
-        if tmp_list is None:
-            tmp_list = predicate
-            is_no_predicate = True
         if T.typeof(tmp_list, tuple, map):
             tmp_list = list(tmp_list)
         if tmp_list and T.typeof(tmp_list, list):
-            if is_no_predicate:
+            if len(args) == 0:
                 for i in range(0, len(tmp_list)):
                     if len(tmp_list) <= i + 1:
                         break
-                    tmp_list = tmp_list[:i + 1] + T.reject(tmp_list[i], tmp_list[i + 1:])
+                    tmp_list = tmp_list[:i + 1] + T.reject(
+						lambda x: x == tmp_list[i], tmp_list[i + 1:])
             else:
-                if T.typeof(predicate, list) and len(predicate) == 1 and T.every(
-                        lambda x: T.typeof(x, dict) and x.has_key(predicate[0]), tmp_list):
-                    for i in range(0, len(tmp_list)):
-                        if len(tmp_list) <= i + 1:
-                            break
-                        tmp_list = tmp_list[:i + 1] + T.reject(
-                            lambda x: x[predicate[0]] == tmp_list[i][predicate[0]], tmp_list[i + 1:])
-                else:
-                    index = T.index(predicate, tmp_list)
-                    if index != -1 and index + 1 < len(tmp_list):
-                        tmp_list = tmp_list[:index + 1] + T.reject(predicate, tmp_list[index + 1:])
-            return tmp_list
-        return _list
-
+                for i in range(0, len(tmp_list)):
+                    if len(tmp_list) <= i + 1:
+                        break
+                    tmp_list = tmp_list[:i + 1] + T.reject(
+                        lambda x: T.__cpr_val(args, x, tmp_list[i]), tmp_list[i + 1:])
+        return tmp_list
+    
+    @staticmethod
+    def __cpr_val(args, dict1, dict2):
+        v1 = T.__get_val(args, dict1)
+        v2 = T.__get_val(args, dict2)
+        return  v1[0] and v2[0] and v1[1] == v2[1]
+    
+    @staticmethod
+    def __get_val(args, _dict):
+        tmp_val = _dict
+        for i in range(0, len(args)):
+            if T.typeof(tmp_val, dict) and tmp_val.has_key(args[i]):
+                tmp_val = tmp_val[args[i]]
+            else:
+                return False, None
+        return True, tmp_val
+    
     __uniq = """
     ### T.uniq
         Produces a duplicate-free version of the array.
@@ -296,26 +303,20 @@ class T(object):
             from funclib import T
             persons00 = ("Tom", "Tom", "Jerry")
             persons01 = ["Tom", "Tom", "Jerry"]
-            persons02 = [{"name": "Tom", "age": 12, "sex": "m"},
-                         {"name": "Tom", "age": 20, "sex": "m"},
-                         {"name": "Mary", "age": 35, "sex": "f"}]
-            demo_list = [False, [], False, True, [], {}, False, '']
+			demo_list = [False, [], False, True, [], {}, False, '']
+            persons02 = [{"name": "Tom", "age": 12, "pet": {"species": "dog", "name": "Kitty"}},
+                         {"name": "Tom", "age": 20, "pet": {"species": "cat", "name": "wang"}},
+                         {"name": "Mary", "age": 35, "pet": {"species": "cat", "name": "mimi"}}]
 
             unique_persons00 = T.uniq(persons00)
             unique_persons01 = T.uniq(persons01)
             unique_demo_list = T.uniq(demo_list)
-            one_Tom = T.uniq({"name": "Tom"}, persons02)
-            one_mail = T.uniq(lambda x: x['sex'] == "m", persons02)
-			# one_Tom = T.uniq(['name'], persons02)
-			# one_mail = T.uniq(['sex'], persons02)
+            unique_name = T.uniq(persons02, 'name')
+			unique_pet = T.uniq(persons02, 'pet', 'species')
 
             print(unique_persons00)  # => ["Jerry", "Tom"]
             print(unique_persons01)  # => ["Jerry", "Tom"]
             print(unique_demo_list)  # => [False, [], True, {}, '']
-            print(one_Tom)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'},
-                                  {'age': 35, 'name': 'Mary', 'sex': 'f'}]
-            print(one_mail)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'},
-                                   {'age': 35, 'name': 'Mary', 'sex': 'f'}]
     """
 
     @staticmethod
@@ -419,6 +420,7 @@ class T(object):
                         return False
             return True
         return False
+
     __every = """
     ### T.every
         Returns true if all of the values in the list pass the predicate truth test.
@@ -525,7 +527,7 @@ class T(object):
             tmp_list = [0, '', 3, None, [], {}, ['Yes'], 'Test']
             drop_val = T.drop(tmp_list)
             without_0 = T.drop(tmp_list, True)
-            
+
             print(drop_val)  # => [3, ['Yes'], 'Test']
             print(without_0)  # => [0, 3, ['Yes'], 'Test']
     """
@@ -573,7 +575,7 @@ class T(object):
             persons_01 = persons
             persons_02 = T.clone(persons)
             T.find({'name': 'Tom'}, persons)['age'] = 18
-            
+
             print(persons_01)  # => [{"name": "Tom", "age": 18},
                                      {"name": "Jerry", "age": 20}]
             print(persons_02)  # => [{"name": "Tom", "age": 12},
@@ -612,7 +614,7 @@ class T(object):
     def iscan(exp):
         if isinstance(exp, str):
             try:
-                exec(exp)
+                exec (exp)
                 return True
             except:
                 return False
@@ -657,7 +659,7 @@ class T(object):
             from funclib import T
             persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
                        {"name": "Jerry", "hobbies": []}]
-                       
+
             T.log(persons)  # =>
 ===========================================================================
                         """ + __log_title + """
@@ -708,7 +710,7 @@ class T(object):
                     return True
                 count += 1
                 print(count)
-                
+
             T.timer(fn, 10, 2)
             # =>
                 >>> 1  #at 0s
@@ -783,22 +785,6 @@ class T(object):
                     T.help(idx, keep=True)
 
     @staticmethod
-    def clear():
-        if platform.system() == "Windows":
-            os.system('cls')
-        else:
-            os.system('clear')
-
-    @staticmethod
-    def typeof(var, *types):
-        if len(types) > 0:
-            for _type in types:
-                if (isinstance(_type, type) and isinstance(var, _type))\
-                        or (_type == 'func' and 'function' in str(type(var))):
-                    return True
-        return False
-
-    @staticmethod
     def __fix_str(string, column=0, max_len=14):
         str_len = len(string)
         tmp_str = string
@@ -815,3 +801,19 @@ class T(object):
             elif column == 3:
                 tmp_str = tmp_str[:-1]
         return tmp_str
+
+    @staticmethod
+    def clear():
+        if platform.system() == "Windows":
+            os.system('cls')
+        else:
+            os.system('clear')
+
+    @staticmethod
+    def typeof(var, *types):
+        if len(types) > 0:
+            for _type in types:
+                if (isinstance(_type, type) and isinstance(var, _type)) \
+                        or (_type == 'func' and 'function' in str(type(var))):
+                    return True
+        return False
