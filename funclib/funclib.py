@@ -20,7 +20,7 @@ class T(object):
 
     @staticmethod
     def info():
-        keys = T.each(lambda x: re.sub(r'\n|\s|=', '', x[:8]), T.__info.split('T.')[1:])
+        keys = T.each(lambda x: T.replace(r'\n|\s|=', '', x[:8]), T.__info.split('T.')[1:])
         docs_vars = vars(T)
         docs_keys = T.each(lambda x: '_T__' + x, keys)
         docs = {}
