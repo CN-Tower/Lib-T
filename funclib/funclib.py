@@ -14,8 +14,8 @@ if sys.version[0] != '2':
 
 class T(object):
     version = 'V2.0.8'
-    __log_title = 'FuncLib ( ' + __version + ' ) --> T.log'
-    __log_title_fix = 'FuncLib ( ' + __version + ' ) --> T.'
+    __log_title = 'FuncLib ( ' + version + ' ) --> T.log'
+    __log_title_fix = 'FuncLib ( ' + version + ' ) --> T.'
 
     @staticmethod
     def info():
@@ -35,7 +35,7 @@ class T(object):
                              Author: @CN-Tower
                           Create At: 2018-2-2
                           Update At: 2018-2-11
-                            Version: """ + __version + """
+                            Version: """ + version + """
                              GitHub: http://github.com/CN-Tower/FuncLib
 -----------------------------------------------------------------------------------
                       0: T.info                 1: T.index
