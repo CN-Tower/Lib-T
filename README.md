@@ -6,8 +6,8 @@
     -----------------------------------------------------------------------------------
                                  Author: @CN-Tower
                               Create At: 2018-2-2
-                              Update At: 2018-2-11
-                                Version: V2.0.7
+                              Update At: 2018-3-15
+                                Version: V2.0.8
                                  GitHub: http://github.com/CN-Tower/FuncLib
     -----------------------------------------------------------------------------------
                           0: T.info                 1: T.index
@@ -192,6 +192,8 @@ $ python
         unique_demo_list = T.uniq(demo_list)
         one_Tom = T.uniq({"name": "Tom"}, persons02)
         one_mail = T.uniq(lambda x: x['sex'] == "m", persons02)
+        # one_Tom = T.uniq(['name'], persons02)
+        # one_mail = T.uniq(['sex'], persons02)
 
         print(unique_persons00)  # => ["Jerry", "Tom"]
         print(unique_persons01)  # => ["Jerry", "Tom"]
