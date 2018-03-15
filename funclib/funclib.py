@@ -261,22 +261,30 @@ class T(object):
     @staticmethod
     def uniq(predicate, _list=None):
         is_no_predicate = False
-        if _list is None:
-            _list = predicate
+        tmp_list = T.clone(_list)
+        if tmp_list is None:
+            tmp_list = predicate
             is_no_predicate = True
-        if T.typeof(_list, tuple, map):
-            _list = list(_list)
-        if _list and isinstance(_list, list):
-            tmp_list = T.clone(_list)
+        if T.typeof(tmp_list, tuple, map):
+            tmp_list = list(tmp_list)
+        if tmp_list and T.typeof(tmp_list, list):
             if is_no_predicate:
                 for i in range(0, len(tmp_list)):
                     if len(tmp_list) <= i + 1:
                         break
                     tmp_list = tmp_list[:i + 1] + T.reject(tmp_list[i], tmp_list[i + 1:])
             else:
-                index = T.index(predicate, tmp_list)
-                if index != -1 and index + 1 < len(tmp_list):
-                    tmp_list = tmp_list[:index + 1] + T.reject(predicate, tmp_list[index + 1:])
+                if T.typeof(predicate, list) and len(predicate) == 1 and T.every(
+                        lambda x: T.typeof(x, dict) and x.has_key(predicate[0]), tmp_list):
+                    for i in range(0, len(tmp_list)):
+                        if len(tmp_list) <= i + 1:
+                            break
+                        tmp_list = tmp_list[:i + 1] + T.reject(
+                            lambda x: x[predicate[0]] == tmp_list[i][predicate[0]], tmp_list[i + 1:])
+                else:
+                    index = T.index(predicate, tmp_list)
+                    if index != -1 and index + 1 < len(tmp_list):
+                        tmp_list = tmp_list[:index + 1] + T.reject(predicate, tmp_list[index + 1:])
             return tmp_list
         return _list
 
@@ -298,6 +306,8 @@ class T(object):
             unique_demo_list = T.uniq(demo_list)
             one_Tom = T.uniq({"name": "Tom"}, persons02)
             one_mail = T.uniq(lambda x: x['sex'] == "m", persons02)
+			# one_Tom = T.uniq(['name'], persons02)
+			# one_mail = T.uniq(['sex'], persons02)
 
             print(unique_persons00)  # => ["Jerry", "Tom"]
             print(unique_persons01)  # => ["Jerry", "Tom"]
