@@ -182,25 +182,21 @@ $ python
         from funclib import T
         persons00 = ("Tom", "Tom", "Jerry")
         persons01 = ["Tom", "Tom", "Jerry"]
-        persons02 = [{"name": "Tom", "age": 12, "sex": "m"},
-                     {"name": "Tom", "age": 20, "sex": "m"},
-                     {"name": "Mary", "age": 35, "sex": "f"}]
         demo_list = [False, [], False, True, [], {}, False, '']
-
+        persons02 = [{"name": "Tom", "age": 12, "pet": {"species": "dog", "name": "Kitty"}},
+                     {"name": "Tom", "age": 20, "pet": {"species": "cat", "name": "wang"}},
+                     {"name": "Mary", "age": 35, "pet": {"species": "cat", "name": "mimi"}}]
+                     
         unique_persons00 = T.uniq(persons00)
         unique_persons01 = T.uniq(persons01)
         unique_demo_list = T.uniq(demo_list)
-        one_Tom = T.uniq({"name": "Tom"}, persons02)
-        one_mail = T.uniq(lambda x: x['sex'] == "m", persons02)
-        # one_Tom = T.uniq(['name'], persons02)
-        # one_mail = T.uniq(['sex'], persons02)
-
+        unique_name = T.uniq(persons02, 'name')
+        unique_pet = T.uniq(persons02, 'pet', 'species')
+        
         print(unique_persons00)  # => ["Jerry", "Tom"]
         print(unique_persons01)  # => ["Jerry", "Tom"]
         print(unique_demo_list)  # => [False, [], True, {}, '']
-        print(one_Tom)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'}, {'age': 35, 'name': 'Mary', 'sex': 'f'}]
-        print(one_mail)  # => [{'age': 12, 'name': 'Tom', 'sex': 'm'}, {'age': 35, 'name': 'Mary', 'sex': 'f'}]
-
+        
 ```
 ### T.pluck
 ```
