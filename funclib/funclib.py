@@ -761,7 +761,7 @@ class T(object):
                 end = 0
                 while True:
                     sta = end
-                    end = end + row_cols
+                    end += row_cols
                     if end > len(hints):
                         hints.append(' ' * (end - len(hints)) * max_key_len + ' ')
                         end = len(hints)
@@ -794,10 +794,8 @@ class T(object):
                 tmp_str = '0' + tmp_str
         elif str_len < max_len:
             tmp_str = string + ' ' * (max_len - str_len - 1)
-            if column == 1:
-                tmp_str = tmp_str + ' '
-            elif column == 2:
-                tmp_str = tmp_str + ' '
+            if column == 1 or column == 2:
+                tmp_str += ' '
             elif column == 3:
                 tmp_str = tmp_str[:-1]
         return tmp_str
