@@ -5,8 +5,8 @@ Author: @CN-Tower
 Create At: 2018-2-2
 Update At: 2018-7-9
 Version: V2.1.1
-GitHub: http://github.com/CN-Tower/funclib.py
-GitLab: http://gitlab.zte.com.cn/CN-Tower/funclib.py
+GitHub: <a href="http://github.com/CN-Tower/funclib.py">http://github.com/CN-Tower/funclib.py</a>
+GitLab: <a href="http://gitlab.zte.com.cn/CN-Tower/funclib.py">http://gitlab.zte.com.cn/CN-Tower/funclib.py</a>
 ```
 ## Quick Start
 ```
