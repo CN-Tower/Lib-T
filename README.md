@@ -1,10 +1,11 @@
 # FuncLib
 > A data processing methods lib for Python(2/3)
-
-Author: @CN-Tower<br>
-Create At: 2018-2-2<br>
-Update At: 2018-7-9<br>
-Version: V2.1.1<br>
+```
+Author: @CN-Tower
+Create At: 2018-2-2
+Update At: 2018-7-9
+Version: V2.1.1
+```
 GitHub: [http://github.com/CN-Tower/funclib.py](http://github.com/CN-Tower/funclib.py)<br>
 GitLab: [http://gitlab.zte.com.cn/CN-Tower/funclib.py](http://gitlab.zte.com.cn/CN-Tower/funclib.py)
 
