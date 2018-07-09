@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-from funclib.funclib import FuncLib as fn
+from funclib import fn
 import os
 import platform
 import time
