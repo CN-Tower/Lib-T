@@ -6,13 +6,13 @@ import sys
 
 setup(
     name="funclib",
-    version="2.0.8",
+    version="2.1.1",
     author="CN-Tower",
     author_email="247114045@qq.com",
     description="A data processing methods lib of python",
     long_description=open("README.rst").read(),
     license='BSD License',
-    packages=["funclib"],
+    packages=[".", "src", "src.config", "src.helper"],
     platforms=["all"],
     url="https://github.com/CN-Tower/FuncLib",
     classifiers=[
