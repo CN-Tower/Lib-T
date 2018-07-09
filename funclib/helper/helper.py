@@ -1,4 +1,4 @@
-from ..config.config import *
+from funclib.config.config import *
 
 class Helper(object):
     _info = """

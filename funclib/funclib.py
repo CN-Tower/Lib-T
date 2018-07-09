@@ -6,10 +6,8 @@ import time
 import copy
 import json
 import platform
-import config
-import helper
-from src.config.config import *
-from src.helper.helper import Helper
+from funclib.config.config import *
+from funclib.helper.helper import Helper
 
 if sys.version[0] != '2':
     from functools import reduce

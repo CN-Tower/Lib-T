@@ -2,7 +2,7 @@
 > A data processing methods lib for Python(2/3)
 ```
 Author: @CN-Tower
-Version: V2.1.1
+Version: 2.1.4
 Create At: 2018-2-2
 Update At: 2018-7-9
 ```

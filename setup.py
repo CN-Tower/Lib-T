@@ -2,17 +2,18 @@
 # -*- coding:utf-8 -*-
 from __future__ import print_function
 from setuptools import setup, find_packages
+from funclib.config.config import *
 import sys
 
 setup(
     name="funclib",
-    version="2.1.1",
+    version=version,
     author="CN-Tower",
     author_email="247114045@qq.com",
     description="A data processing methods lib of python",
     long_description=open("README.rst").read(),
     license='BSD License',
-    packages=[".", "src", "src.config", "src.helper"],
+    packages=find_packages(),
     platforms=["all"],
     url="https://github.com/CN-Tower/FuncLib",
     classifiers=[
