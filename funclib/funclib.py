@@ -6,12 +6,15 @@ import time
 import copy
 import json
 import platform
-from funclib.config.config import *
-from funclib.helper.helper import Helper
 
 if sys.version[0] != '2':
+    from funclib.config.config import *
+    from funclib.helper.helper import Helper
     from functools import reduce
     raw_input = input
+else:
+    from .config.config import *
+    from .helper.helper import Helper
 
 class FuncLib(object):
     @staticmethod
