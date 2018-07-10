@@ -1,8 +1,10 @@
 # FuncLib
 > A data processing methods lib for Python(2/3)
+python 有自带的几个高阶函数（map、reduce、filter）堪称神器，但是可惜在数据处理频繁的开发过程中，它们却还是有点不够用，很多常见的数据处理都要另外去写逻辑。
+针对这个问题，这里封装了一个非常轻的Python数据处理函数库。
 ```
 Author: @CN-Tower
-Version: 2.1.4
+Version: V2.1.1
 Create At: 2018-2-2
 Update At: 2018-7-9
 ```
