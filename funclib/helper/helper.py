@@ -1,4 +1,9 @@
-from funclib.config.config import *
+import sys
+
+if sys.version[0] != '2':
+    from funclib.config.config import *
+else:
+    from ..config.config import *
 
 class Helper(object):
     _info = """
@@ -29,10 +34,8 @@ class Helper(object):
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
-
             Jerry_idx = fn.index({"name": 'Jerry'}, persons)
             Mary_idx  = fn.index(lambda x: x['name'] == 'Mary', persons)
-
             print(Jerry_idx)  # => 1
             print(Mary_idx)   # => 2
     """
@@ -47,10 +50,8 @@ class Helper(object):
             persons = [{"name": "Tom", "age": 12},
                 {"name": "Jerry", "age": 20},
                 {"name": "Mary", "age": 35}]
-
             Jerry = fn.find({"name": 'Jerry'}, persons)
             Mary  = fn.find(lambda x: x['name'] == 'Mary', persons)
-
             print(Jerry)  # => {'age': 20, 'name': 'Jerry'}
             print(Mary)   # => {'age': 35, 'name': 'Mary'}
     """
@@ -63,7 +64,6 @@ class Helper(object):
             persons = [{"name": "Tom", "age": 20},
                         {"name": "Jerry", "age": 20},
                         {"name": "Jerry", "age": 35}]
-
             Jerry = fn.filter({"age": 20}, persons)
             Mary = fn.filter(lambda x: x['name'] == 'Jerry', persons)
             print(Jerry)  # => [{'age': 20, 'name': 'Tom'},
@@ -81,10 +81,8 @@ class Helper(object):
             persons = [{"name": "Tom", "age": 12},
                         {"name": "Jerry", "age": 20},
                         {"name": "Mary", "age": 35}]
-
             not_Mary = fn.reject({"name": "Mary"}, persons)
             adults = fn.reject(lambda x: x['age'] < 18, persons)
-
             print(not_Mary)  # => [{"age": 12, "name": "Tom"},
                                     {"age": 20, "name": "Jerry"}]
             print(adults)    # => [{"age": 20, "name": "Jerry"},
@@ -107,10 +105,8 @@ class Helper(object):
             persons = [{"name": "Tom", "age": 12},
                         {"name": "Jerry", "age": 20},
                         {"name": "Mary", "age": 35}]
-
             is_contains_Jerry = fn.contains({"name": "Jerry", "age": 12}, persons)
             is_contains_Mary = fn.contains(lambda x: x['name'] == 'Mary', persons)
-
             print(is_contains_Jerry)  # => False
             print(is_contains_Mary)   # => True
     """
@@ -147,13 +143,11 @@ class Helper(object):
             persons02 = [{"name": "Tom", "age": 12, "pet": {"species": "dog", "name": "Kitty"}},
                             {"name": "Tom", "age": 20, "pet": {"species": "cat", "name": "wang"}},
                             {"name": "Mary", "age": 35, "pet": {"species": "cat", "name": "mimi"}}]
-
             unique_persons00 = fn.uniq(persons00)
             unique_persons01 = fn.uniq(persons01)
             unique_demo_list = fn.uniq(demo_list)
             unique_name = fn.uniq(persons02, 'name')
             unique_pet = fn.uniq(persons02, 'pet', 'species')
-
             print(unique_persons00)  # => ["Jerry", "Tom"]
             print(unique_persons01)  # => ["Jerry", "Tom"]
             print(unique_demo_list)  # => [False, [], True, {}, '']
@@ -166,10 +160,8 @@ class Helper(object):
             persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
                 {"name": "Jerry", "hobbies": []},
                 {"name": "Mary", "hobbies": ['hiking', 'sing']}]
-
             hobbies = fn.pluck(persons, 'hobbies')
             hobbies_uniq = fn.pluck(persons, 'hobbies', uniq=True)
-
             print(hobbies)      # => ["sing", "running", 'hiking', 'sing']
             print(hobbies_uniq) # => ["sing", "running", 'hiking']
     """
@@ -205,7 +197,6 @@ class Helper(object):
             persons = [{"name": "Tom", "age": 12, "sex": "m"},
                         {"name": "Jerry", "age": 20, "sex": "m"},
                         {"name": "Mary", "age": 35, "sex": "f"}]
-
             is_all_five = fn.every(5, num_list)
             is_all_male = fn.every({"sex": "m"}, persons)
             is_all_adult = fn.every(lambda x: x['age'] > 18, persons)
@@ -224,7 +215,6 @@ class Helper(object):
             persons = [{"name": "Tom", "age": 12, "sex": "m"},
                         {"name": "Jerry", "age": 20, "sex": "m"},
                         {"name": "Mary", "age": 35, "sex": "f"}]
-
             is_any_five = fn.some(5, num_list)
             is_any_male = fn.some({"sex": "m"}, persons)
             is_any_adult = fn.some(lambda x: x['age'] > 18, persons)
@@ -251,7 +241,6 @@ class Helper(object):
             tmp_list = [0, '', 3, None, [], {}, ['Yes'], 'Test']
             drop_val = fn.drop(tmp_list)
             without_0 = fn.drop(tmp_list, True)
-
             print(drop_val)  # => [3, ['Yes'], 'Test']
             print(without_0)  # => [0, 3, ['Yes'], 'Test']
     """
@@ -287,7 +276,6 @@ class Helper(object):
             persons_01 = persons
             persons_02 = fn.clone(persons)
             fn.find({'name': 'Tom'}, persons)['age'] = 18
-
             print(persons_01)  # => [{"name": "Tom", "age": 18},
                                         {"name": "Jerry", "age": 20}]
             print(persons_02)  # => [{"name": "Tom", "age": 12},
@@ -357,7 +345,6 @@ class Helper(object):
                     return True
                 count += 1
                 print(count)
-
             fn.timer(fn, 10, 2)
             # =>
                 >>> 1  #at 0s
@@ -372,4 +359,3 @@ class Helper(object):
             from funclib import fn
             print(fn.now()) # => '2018-2-1 19:32:10'
     """
-    
