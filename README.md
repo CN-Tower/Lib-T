@@ -4,7 +4,7 @@ python 有自带的几个高阶函数（map、reduce、filter）堪称神器，�
 针对这个问题，这里封装了一个非常轻的Python数据处理函数库。
 ```
 Author: @CN-Tower
-Version: V2.1.1
+Version: V2.1.4
 Create At: 2018-2-2
 Update At: 2018-7-9
 ```
