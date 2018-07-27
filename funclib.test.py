@@ -103,7 +103,7 @@ class TestDict(unittest.TestCase):
             msg=None
         )
         self.assertListEqual(
-            fn.pluck(persons, 'hobbies', uniq=True),
+            fn.pluck(persons, 'hobbies', is_uniq=True),
             ["sing", "running", 'hiking'],
             msg=None
         )
