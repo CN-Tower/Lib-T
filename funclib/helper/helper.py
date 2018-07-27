@@ -1,11 +1,103 @@
 import sys
 
-if sys.version[0] != '2':
-    from funclib.config.config import *
+if sys.version[0] == '2':
+    from ..funclib_conf import *
+    from ..funclib import FuncLib as fn
 else:
-    from ..config.config import *
+    from funclib.funclib_conf import *
+    from funclib.funclib import FuncLib as fn
+    raw_input = input
+
 
 class Helper(object):
+
+    @staticmethod
+    def info():
+        docs_vars = vars(Helper)
+        keys = fn.each(lambda x: fn.replace(r'\n|\s|=', '', x[:8]), Helper._info.split('fn.')[1:])
+        docs_keys = fn.each(lambda x: '_' + x, keys)
+        docs = {}
+        for key in keys:
+            docs[key] = docs_vars[docs_keys[keys.index(key)]]
+        return {'keys': keys, 'docs': docs}
+
+    @staticmethod
+    def help(*args, **kwargs):
+        docs_info = Helper.info()
+        keys = docs_info['keys']
+        docs = docs_info['docs']
+        if len(args) > 0:
+            is_show_hint = False
+            if args[0] in keys:
+                fn.clear()
+                if args[0] == 'info':
+                    print(docs['info'])
+                else:
+                    is_show_hint = True
+                    fn.log(docs[args[0]], title='fn.' + args[0])
+            if 'keep' in kwargs and kwargs['keep']:
+                Helper.help(hint=is_show_hint, **kwargs)
+        else:
+            Helper.help_without_args(keys, docs, kwargs)
+            Helper.get_row_input(keys, docs)
+
+    @staticmethod
+    def help_without_args(keys, docs, kwargs):
+        row_cols = 6
+        max_key_len = max(fn.each(lambda x: len(x), keys)) + 6
+        if not ('keep' in kwargs and kwargs['keep']):
+            fn.clear()
+            print(docs['info'])
+        elif 'hint' in kwargs and kwargs['hint']:
+            print('')
+            hints = fn.each(lambda x: Helper.__fix_str(
+                Helper.__fix_str(str(keys.index(x))) + x, keys.index(x) % row_cols + 1, max_key_len
+            ), keys)
+            end = 0
+            while True:
+                sta = end
+                end += row_cols
+                if end > len(hints):
+                    hints.append(' ' * (end - len(hints)) * max_key_len + ' ')
+                    end = len(hints)
+                print('[ ' + reduce(lambda a, b: a + ' ' + b, hints[sta:end]) + ']')
+                if end == len(hints):
+                    break
+            print('')
+    
+    @staticmethod
+    def get_row_input(keys, docs):
+        idx = raw_input('Input a method or it\'s index (Nothing input will Return!): ')
+        if idx:
+            if fn.iscan('int(%s)' % idx) and int(idx) in range(0, len(keys)):
+                fn.clear()
+                is_show_hint = False
+                key = keys[int(idx)]
+                if idx == '0':
+                    print(docs[key])
+                else:
+                    is_show_hint = True
+                    fn.log(docs[key], title='fn.' + key)
+                Helper.help(keep=True, hint=is_show_hint)
+            else:
+                Helper.help(idx, keep=True)
+
+    @staticmethod
+    def __fix_str(string, column=0, max_len=14):
+        str_len = len(string)
+        tmp_str = string
+        if column == 0:
+            tmp_str = string + ': fn.'
+            if str_len == 1:
+                tmp_str = '0' + tmp_str
+        elif str_len < max_len:
+            tmp_str = string + ' ' * (max_len - str_len - 1)
+            if column == 1 or column == 2:
+                tmp_str += ' '
+            elif column == 3:
+                tmp_str = tmp_str[:-1]
+        return tmp_str
+
     _info = """
     ===================================================================================
                                         Func-Lib
