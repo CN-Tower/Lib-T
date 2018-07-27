@@ -174,7 +174,7 @@ class TestDict(unittest.TestCase):
         self.assertTrue(fn.typeof(lambda x: x, 'fun'))
 
     def test_typeval(self):
-        self.assertEqual(fn.typeval('test', 'str'), 'test1')
+        self.assertEqual(fn.typeval('test', 'str'), 'test')
         self.assertListEqual(fn.typeval([], 'lst'), [], msg=None)
         self.assertFalse(fn.typeval({}, 'lst'))
         
