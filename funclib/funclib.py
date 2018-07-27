@@ -250,7 +250,7 @@ class FuncLib(object):
         return True, tmp_val
 
     @staticmethod
-    def pluck(body, *keys, is_uniq=False):
+    def pluck(body, *keys, **conf):
         """
         ### fn.pluck
             Pluck the collections element.
@@ -273,7 +273,7 @@ class FuncLib(object):
                 if len(field_k) > 0:
                     tmp_body = reduce(FuncLib.tolist, field_k)
                 tmp_body = FuncLib.tolist(tmp_body)
-            if FuncLib.typeval(is_uniq, 'bol'):
+            if FuncLib.get(conf, '/is_uniq', 'bol'):
                 tmp_body = FuncLib.uniq(tmp_body)
         return tmp_body
 
