@@ -512,25 +512,30 @@ class FuncLib(object):
         ==========================================================
         """
         width = 68
+        if 'width' in conf and FuncLib.typeof(conf['width'], 'int') and conf['width'] > 40:
+            width = conf['width']
+        line_b = '=' * width
+        line_m = '-' * width
+        line_s = '- ' * int((width / 2))
+        if 'end' in conf and FuncLib.typeval(conf['end'], 'bol'):
+            print('%s\n' % line_b)
+            return
         time_info = "[" + time.strftime("%H:%M:%S", time.localtime()) + "] "
         title = time_info + log_title
         if 'title' in conf and str(conf['title']):
             tt = time_info + str(conf['title'])
             title = len(tt) <= 35 and tt or tt[:35]
-        if 'width' in conf and FuncLib.typeof(conf['width'], int) and conf['width'] > 40:
-            width = conf['width']
-        line_b = '=' * width
-        line_m = '-' * width
-        line_s = '- ' * int((width / 2))
         title = ' ' * int((width - len(title)) / 2) + title
         print('\n%s\n%s\n%s' % (line_b, title, line_m))
+        if 'pre' in conf and FuncLib.typeval(conf['pre'], 'bol'):
+            return
         if len(msgs) > 0:
             for i in range(0, len(msgs)):
                 if i > 0:
                     print(line_s)
                 print(FuncLib.dump(msgs[i]))
         else:
-            print('Have no Message!')
+            print('None')
         print('%s\n' % line_b)
 
     @staticmethod
