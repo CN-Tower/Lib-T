@@ -10,7 +10,7 @@
 - 欢迎大家一起来玩，有Bug和不好的地方，希望大虾们不吝赐教！
 
 ## Repository
-Gitlab: http://gitlab.zte.com.cn/CN-Tower/funclib.py
+Gitlab: http://gitlab.zte.com.cn/CN-Tower/funclib.py<br>
 Github: http://github.com/CN-Tower/funclib.py 
 
 ## Quick Start
