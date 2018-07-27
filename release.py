@@ -2,33 +2,28 @@
 # -*- coding:utf-8 -*-
 from funclib import fn
 import os
+import shutil
 import platform
 import time
 
 def del_temp_files():
     print('\nDeleting temp files !!! ...\n')
-    tmp_files = ['build', 'dist', 'funclib.egg-info']
-    if platform.system() == "Windows":
-        for f in tmp_files:
-            if os.path.exists(f):
-                if os.path.isfile(f):
-                    os.system('del ' + f)
-                else:
-                    os.system('rd /s /q ' + f)
-    else:
-        for f in tmp_files:
-            os.system('rm -rf ' + f)
+    tmp_files = ['build', 'dist', 'funclib.egg-info', 'README.rst']
+    for f in tmp_files:
+        if os.path.exists(f):
+            if os.path.isfile(f):
+                os.remove(f)
+            else:
+                shutil.rmtree(f) 
     time.sleep(1)
     print('\nDelete temp files Success!')
 
-def md_2_rst():
-    print('\nRename README.md to README.rst !!! ...\n')
-    if platform.system() == "Windows" and os.path.exists('README.md'):
-        os.system('ren README.md README.rst')
-    else:
-        os.system('mv README.md README.rst')
+def cp_md_2_rst():
+    print('\nCoping README.md to README.rst !!! ...\n')
+    shutil.copyfile("README.md","./README.rst") 
     time.sleep(1)
-    print('\nRename README.md to README.rst Success!')
+    print('\nCoping README.md to README.rst Success !!! ...\n')
+
 
 def build_dist(): 
     print('\nBuilding Dist !!! ...\n')
@@ -44,21 +39,12 @@ def release_funclib():
     time.sleep(1)
     print('\nRelease Success!')
 
-def rst_2_md():
-    print('\nRename README.rst to README.md !!! ...\n')
-    if platform.system() == "Windows":
-        os.system('ren README.rst README.md')
-    else:
-        os.system('mv README.rst README.md')
-    time.sleep(1)
-    print('\nRename README.rst to README.md Success!\n')
-
 if __name__ == '__main__':
     fn.clear()
     fn.log('Release Starting !!! ...')
     del_temp_files()
-    md_2_rst()
+    cp_md_2_rst()
     build_dist()
     release_funclib()
-    rst_2_md()
     fn.log('Congratulations, Release totaly Success!')
+    
