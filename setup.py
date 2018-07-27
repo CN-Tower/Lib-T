@@ -2,8 +2,13 @@
 # -*- coding:utf-8 -*-
 from __future__ import print_function
 from setuptools import setup, find_packages
-from funclib.config.config import *
+from funclib.funclib_conf import *
 import sys
+
+if sys.version[0] == '2':
+    long_desc = open("README.rst", 'rb').read()
+else:
+    long_desc = open("README.rst", 'r', encoding='UTF-8').read()
 
 setup(
     name="funclib",
@@ -11,7 +16,7 @@ setup(
     author="CN-Tower",
     author_email="247114045@qq.com",
     description="A data processing methods lib of python",
-    long_description=open("README.rst").read(),
+    long_description=long_desc,
     license='BSD License',
     packages=find_packages(),
     platforms=["all"],
