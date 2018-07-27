@@ -28,12 +28,13 @@ class FuncLib(object):
     -------------------------------------------------------------------------------
             fn.index         fn.find           fn.filter         fn.reject
             fn.reduce        fn.contains       fn.flatten        fn.uniq
-            fn.pluck         fn.get            fn.every          fn.some
-            fn.tolist        fn.drop           fn.dump           fn.test
-            fn.replace       fn.iscan          fn.log            fn.timer
-            fn.typeof        fn.typeval        fn.clear          fn.now
+            fn.pluck         fn.every          fn.some           fn.tolist
+            fn.drop          fn.typeof         fn.typeval        fn.get
+            fn.dump          fn.test           fn.replace        fn.iscan
+            fn.log           fn.timer          fn.now            fn.clear
     ===============================================================================
     """
+    
     @staticmethod
     def index(predicate, src_list):
         """ 
@@ -181,7 +182,7 @@ class FuncLib(object):
             the array will only be flattened a single level.
             eg:
                 fn.flatten([1, [2], [3, [[4]]]])        # => [1, 2, 3, [[4]]]
-                fn.flatten([1, [2], [3, [[4]]]], True)  # => [1, 2, 3, 4]; 
+                fn.flatten([1, [2], [3, [[4]]]], True)  # => [1, 2, 3, 4] 
         """
         if src_list and FuncLib.typeof(src_list, 'lst', 'map', 'tup'):
             tmp_list = []
@@ -248,9 +249,8 @@ class FuncLib(object):
                 return False, None
         return True, tmp_val
 
-
     @staticmethod
-    def pluck(body, *key, **opt):
+    def pluck(body, *keys, is_uniq=False):
         """
         ### fn.pluck
             Pluck the collections element.
@@ -268,48 +268,14 @@ class FuncLib(object):
         else:
             tmp_body = body
         if FuncLib.typeof(tmp_body, 'lst', 'map', 'tup'):
-            for k in key:
-                field_k = list(map(lambda x: x[k], tmp_body))
+            for key in keys:
+                field_k = list(map(lambda x: x[key], tmp_body))
                 if len(field_k) > 0:
                     tmp_body = reduce(FuncLib.tolist, field_k)
                 tmp_body = FuncLib.tolist(tmp_body)
-            if bool(opt) and "uniq" in opt and opt['uniq']:
+            if FuncLib.typeval(is_uniq, 'bol'):
                 tmp_body = FuncLib.uniq(tmp_body)
         return tmp_body
-
-    @staticmethod
-    def get(origin, path, *types):
-        """
-        ### fn.get
-            Pick values form dict or list.
-            eg:
-                Tom = {
-                    "name": "Tom",
-                    "age": 12,
-                    "pets": [
-                        {"species": "dog", "name": "Kitty"},
-                        {"species": "cat", "name": "mimi"}
-                    ]
-                }
-                fn.get(Tom, '/age')             # => 12
-                fn.get(Tom, '/pets/0/species')  # => dog
-                fn.get(Tom, '/pets/1/name')     # => mimi
-        """
-        if origin and path:
-            tmp_val = origin
-            paths = FuncLib.drop(path.split('/'));
-            for pt in paths:
-                if pt in tmp_val:
-                    tmp_val = tmp_val[pt]
-                else:
-                    tmp_val = FuncLib.__listlize(tmp_val)
-                    if FuncLib.typeof(tmp_val, 'lst')\
-                        and FuncLib.iscan('int(%s)' %pt) and len(tmp_val) >= int(pt):
-                        tmp_val = tmp_val[int(pt)]
-                    else:
-                        return None
-            return FuncLib.typeval(tmp_val, *types)
-        return None
 
     @staticmethod
     def every(predicate, src_list):
@@ -379,7 +345,7 @@ class FuncLib(object):
     def tolist(*values):
         """
         ### fn.tolist
-            Return now system time.
+            Return a listlized value.
             eg:
                 fn.tolist()       # => []
                 fn.tolist([])     # => []
@@ -419,172 +385,6 @@ class FuncLib(object):
                         tmp_list.append(item)
                 return tmp_list
         return src_list
-
-    @staticmethod
-    def dump(_json, **conf):
-        """
-        ### fn.dump
-            Return a formatted json string.
-            eg:
-                persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
-                    {"name": "Jerry", "hobbies": []}]
-                print(fn.dump(persons)) #=>
-                [
-                    {
-                    "hobbies": [
-                        "sing", 
-                        "running"
-                    ], 
-                    "name": "Tom"
-                    }, 
-                    {
-                    "hobbies": [], 
-                    "name": "Jerry"
-                    }
-                ]
-        """
-        FuncLib.__listlize(_json)
-        if FuncLib.typeof(_json, 'lst', 'dic'):
-            is_sort = FuncLib.get(conf, '/sort_keys') or True
-            idt = FuncLib.get(conf, '/indent') or True
-            return json.dumps(_json, sort_keys=True, indent=2)
-        return _json
-
-    @staticmethod
-    def test(pattern, origin):
-        """
-        ### fn.test
-            Check is the match successful, a boolean value will be returned.
-            eg:
-                fn.test(r'ab', 'Hello World!')  # => False
-                fn.test(r'll', 'Hello World!')  # => True
-        """
-        return re.search(pattern, origin) is not None
-
-    @staticmethod
-    def replace(*args):
-        """
-        ### fn.replace
-            Replace sub string of the origin string with re.sub()
-            eg:
-                greetings = 'Hello I\'m Tom!'
-                print(fn.replace(r'Tom', 'Jack', greetings)) # => Hello I'm Jack!
-        """
-        return re.sub(*args)
-
-    @staticmethod
-    def iscan(exp):
-        """
-        ### fn.iscan
-            Test is the expression valid, a boolean value will be returned.
-            eg:
-                print(fn.iscan("int('a')"))  # => False
-                print(fn.iscan("int('5')"))  # => True
-        """
-        if isinstance(exp, str):
-            try:
-                exec (exp)
-                return True
-            except:
-                return False
-        return False
-
-    @staticmethod
-    def log(*msgs, **conf):
-        """
-        ### fn.log
-            Show log clear in console.
-            eg:
-                persons = [{"name": "Tom", "hobbies": ["sing", "running"]}]
-                fn.log(persons)  # =>
-        ==========================================================
-                            [12:22:35] funclib 2.1.5
-        ----------------------------------------------------------
-        [
-            {
-                "hobbies": [
-                    "sing", 
-                    "running"
-                ], 
-                "name": "Tom"
-            }
-        ]
-        ==========================================================
-        """
-        width = 68
-        if 'width' in conf and FuncLib.typeof(conf['width'], 'int') and conf['width'] > 40:
-            width = conf['width']
-        line_b = '=' * width
-        line_m = '-' * width
-        line_s = '- ' * int((width / 2))
-        if 'end' in conf and FuncLib.typeval(conf['end'], 'bol'):
-            print('%s\n' % line_b)
-            return
-        time_info = "[" + time.strftime("%H:%M:%S", time.localtime()) + "] "
-        title = time_info + log_title
-        if 'title' in conf and str(conf['title']):
-            tt = time_info + str(conf['title'])
-            title = len(tt) <= 35 and tt or tt[:35]
-        title = ' ' * int((width - len(title)) / 2) + title
-        print('\n%s\n%s\n%s' % (line_b, title, line_m))
-        if 'pre' in conf and FuncLib.typeval(conf['pre'], 'bol'):
-            return
-        if len(msgs) > 0:
-            for i in range(0, len(msgs)):
-                if i > 0:
-                    print(line_s)
-                print(FuncLib.dump(msgs[i]))
-        else:
-            print('None')
-        print('%s\n' % line_b)
-
-    @staticmethod
-    def timer(func, times=60, interval=1):
-        """
-        ### fn.timer
-            Set a timer with interval and timeout limit.
-            eg: 
-                count = 0
-                def fn():
-                    global count
-                    if count == 4:
-                        return True
-                    count += 1
-                    print(count)
-                fn.timer(fn, 10, 2)
-                # =>
-                    >>> 1  #at 0s
-                    >>> 2  #at 2s
-                    >>> 3  #at 4s
-                    >>> 4  #at 4s
-        """
-        if not FuncLib.typeof(func, 'fun')\
-            or not isinstance(times, int)\
-            or not isinstance(interval, int)\
-            or times < 1 or interval < 0:
-            return
-        is_time_out = False
-        count = 0
-        while True:
-            count += 1
-            if count == times:
-                func()
-                is_time_out = True
-                break
-            elif func():
-                break
-            time.sleep(interval)
-        return is_time_out
-
-    @staticmethod
-    def now():
-        """
-        ### fn.now
-            Return system now time.
-            eg: 
-                fn.now()    #=> 2018-07-26 14:34:26
-        """
-        return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
 
     @staticmethod
     def typeof(value, *types):
@@ -649,6 +449,206 @@ class FuncLib(object):
             if not FuncLib.typeof(value, *types):
                 return False
         return value
+
+    @staticmethod
+    def get(origin, path, *types):
+        """
+        ### fn.get
+            Get values form dict or list.
+            eg:
+                Tom = {
+                    "name": "Tom",
+                    "age": 12,
+                    "pets": [
+                        {"species": "dog", "name": "Kitty"},
+                        {"species": "cat", "name": "mimi"}
+                    ]
+                }
+                fn.get(Tom, '/age')             # => 12
+                fn.get(Tom, '/pets/0/species')  # => dog
+                fn.get(Tom, '/pets/1/name')     # => mimi
+        """
+        if origin and path:
+            tmp_val = origin
+            paths = FuncLib.drop(path.split('/'));
+            for pt in paths:
+                if pt in tmp_val:
+                    tmp_val = tmp_val[pt]
+                else:
+                    tmp_val = FuncLib.__listlize(tmp_val)
+                    if FuncLib.typeof(tmp_val, 'lst')\
+                        and FuncLib.iscan('int(%s)' %pt) and len(tmp_val) >= int(pt):
+                        tmp_val = tmp_val[int(pt)]
+                    else:
+                        return None
+            return FuncLib.typeval(tmp_val, *types)
+        return None
+
+    @staticmethod
+    def dump(_json, **conf):
+        """
+        ### fn.dump
+            Return a formatted json string.
+            eg:
+                persons = [{"name": "Tom", "hobbies": ["sing", "running"]},
+                    {"name": "Jerry", "hobbies": []}]
+                print(fn.dump(persons)) #=>
+                [
+                    {
+                    "hobbies": [
+                        "sing", 
+                        "running"
+                    ], 
+                    "name": "Tom"
+                    }, 
+                    {
+                    "hobbies": [], 
+                    "name": "Jerry"
+                    }
+                ]
+        """
+        FuncLib.__listlize(_json)
+        if FuncLib.typeof(_json, 'lst', 'dic'):
+            is_sort = FuncLib.get(conf, '/sort_keys') or True
+            idt = FuncLib.get(conf, '/indent') or True
+            return json.dumps(_json, sort_keys=True, indent=2)
+        return _json
+
+    @staticmethod
+    def test(pattern, origin):
+        """
+        ### fn.test
+            Varify is the match successful, a boolean value will be returned.
+            eg:
+                fn.test(r'ab', 'Hello World!')  # => False
+                fn.test(r'll', 'Hello World!')  # => True
+        """
+        return re.search(pattern, origin) is not None
+
+    @staticmethod
+    def replace(*args):
+        """
+        ### fn.replace
+            Replace sub string of the origin string with re.sub()
+            eg:
+                greetings = 'Hello I\'m Tom!'
+                print(fn.replace(r'Tom', 'Jack', greetings)) # => Hello I'm Jack!
+        """
+        return re.sub(*args)
+
+    @staticmethod
+    def iscan(exp):
+        """
+        ### fn.iscan
+            Test is the expression valid, a boolean value will be returned.
+            eg:
+                print(fn.iscan("int('a')"))  # => False
+                print(fn.iscan("int('5')"))  # => True
+        """
+        if isinstance(exp, str):
+            try:
+                exec (exp)
+                return True
+            except:
+                return False
+        return False
+
+    @staticmethod
+    def log(*values, **conf):
+        """
+        ### fn.log
+            Show log clear in console.
+            eg:
+                persons = [{"name": "Tom", "hobbies": ["sing", "running"]}]
+                fn.log(persons)  # =>
+        ==========================================================
+                            [12:22:35] funclib 2.1.5
+        ----------------------------------------------------------
+        [
+            {
+                "hobbies": [
+                    "sing", 
+                    "running"
+                ], 
+                "name": "Tom"
+            }
+        ]
+        ==========================================================
+        """
+        width = 68
+        if 'width' in conf and FuncLib.typeof(conf['width'], 'int') and conf['width'] > 40:
+            width = conf['width']
+        line_b = '=' * width
+        line_m = '-' * width
+        line_s = '- ' * int((width / 2))
+        if 'end' in conf and FuncLib.typeval(conf['end'], 'bol'):
+            print('%s\n' % line_b)
+            return
+        time_info = "[" + time.strftime("%H:%M:%S", time.localtime()) + "] "
+        title = time_info + log_title
+        if 'title' in conf and str(conf['title']):
+            tt = time_info + str(conf['title'])
+            title = len(tt) <= 35 and tt or tt[:35]
+        title = ' ' * int((width - len(title)) / 2) + title
+        print('\n%s\n%s\n%s' % (line_b, title, line_m))
+        if 'pre' in conf and FuncLib.typeval(conf['pre'], 'bol'):
+            return
+        if len(values) > 0:
+            for i in range(0, len(values)):
+                if i > 0:
+                    print(line_s)
+                print(FuncLib.dump(values[i]))
+        else:
+            print('None')
+        print('%s\n' % line_b)
+
+    @staticmethod
+    def timer(func, times=60, interval=1):
+        """
+        ### fn.timer
+            Set a timer with interval and timeout limit.
+            eg: 
+                count = 0
+                def fn():
+                    global count
+                    if count == 4:
+                        return True
+                    count += 1
+                    print(count)
+                fn.timer(fn, 10, 2)
+                # =>
+                    >>> 1  #at 0s
+                    >>> 2  #at 2s
+                    >>> 3  #at 4s
+                    >>> 4  #at 4s
+        """
+        if not FuncLib.typeof(func, 'fun')\
+            or not isinstance(times, int)\
+            or not isinstance(interval, int)\
+            or times < 1 or interval < 0:
+            return
+        is_time_out = False
+        count = 0
+        while True:
+            count += 1
+            if count == times:
+                func()
+                is_time_out = True
+                break
+            elif func():
+                break
+            time.sleep(interval)
+        return is_time_out
+
+    @staticmethod
+    def now():
+        """
+        ### fn.now
+            Return system now time.
+            eg: 
+                fn.now()    #=> 2018-07-26 14:34:26
+        """
+        return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
 
     @staticmethod
     def clear():
