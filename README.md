@@ -11,7 +11,7 @@ python 有自带的几个高阶函数（map、reduce、filter）堪称神器，�
 
 欢迎大家一起来玩，有Bug和不好的地方，希望大虾们不吝赐教！<br>
 
-#### Document http://funclib.net
+### Document http://funclib.net/funclib.py.html
 
 ## Repository
 Gitlab: http://gitlab.zte.com.cn/CN-Tower/funclib.py<br>
